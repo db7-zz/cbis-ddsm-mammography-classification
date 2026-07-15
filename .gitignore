@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+artifacts/
+data/
+configs/data.local.yaml
+.github_known_hosts
+*.pt
+*.pth
+*.ckpt

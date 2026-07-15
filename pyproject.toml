@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cbis-ddsm-reproduction"
+version = "0.1.0"
+description = "Patient-safe data pipeline for a CBIS-DDSM calcification baseline reproduction"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "numpy",
+  "pandas",
+  "Pillow",
+  "pydicom",
+  "PyYAML",
+  "scikit-learn",
+  "torch==2.9.1",
+  "torchvision==0.24.1",
+]
+
+[project.optional-dependencies]
+dicom = ["pylibjpeg", "pylibjpeg-libjpeg", "pylibjpeg-openjpeg"]
+dev = ["pytest"]
+reporting = ["matplotlib", "seaborn", "tensorboard", "tqdm"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra"

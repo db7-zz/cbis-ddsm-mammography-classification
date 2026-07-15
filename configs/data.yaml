@@ -1,0 +1,29 @@
+{
+  "experiment": {
+    "name": "cbis_ddsm_calc_whole_mammogram_phase1",
+    "reproduction_assumption": "Calcification-only plus whole mammogram is user-approved, but the original experiment manifest and predictions are unavailable."
+  },
+  "data": {
+    "data_root": "",
+    "idc_metadata_csv": "",
+    "train_csv": "",
+    "test_csv": "",
+    "output_dir": "artifacts/data",
+    "val_fraction": 0.20,
+    "split_seed": 42,
+    "verify_images": true,
+    "strict_missing_images": true,
+    "allowed_extensions": [".dcm", ".dicom", ".png", ".jpg", ".jpeg", ".tif", ".tiff"]
+  },
+  "preprocessing": {
+    "image_size": 256,
+    "dicom_apply_modality_lut": true,
+    "dicom_apply_voi_lut": true,
+    "lower_percentile": 0.5,
+    "upper_percentile": 99.5,
+    "train_horizontal_flip_probability": 0.0,
+    "train_rotation_degrees": 0.0,
+    "imagenet_mean": [0.485, 0.456, 0.406],
+    "imagenet_std": [0.229, 0.224, 0.225]
+  }
+}
