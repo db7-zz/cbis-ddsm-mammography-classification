@@ -1,0 +1,27 @@
+{
+  "experiment": {
+    "name": "cbis_ddsm_calc_whole_mammogram_phase2",
+    "task": "binary_malignancy_classification",
+    "reproduction_assumptions": [
+      "ImageNet-pretrained EfficientNet-B0 initialization",
+      "two-dimensional sinusoidal positional encoding",
+      "Transformer feed-forward width 2048 with GELU and dropout 0.1",
+      "post-Transformer mean token pooling followed by LayerNorm"
+    ]
+  },
+  "model": {
+    "input_size": 256,
+    "backbone": "efficientnet_b0",
+    "pretrained": true,
+    "freeze_backbone": false,
+    "projection_dim": 512,
+    "transformer_layers": 4,
+    "attention_heads": 8,
+    "feedforward_dim": 2048,
+    "dropout": 0.1,
+    "activation": "gelu",
+    "positional_encoding": "sinusoidal_2d",
+    "pooling": "mean",
+    "output_logits": 1
+  }
+}

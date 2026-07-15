@@ -1,13 +1,15 @@
 # CBIS-DDSM calcification baseline reproduction
 
 This repository is a clean-room reproduction of the approved calcification-only,
-whole-mammogram CBIS-DDSM binary classification baseline.  Phase 1 contains only
-the data pipeline: official CSV indexing, patient-level splitting, image loading,
-transforms, statistics, leakage checks, and tests.  Model and training code are
-intentionally out of scope for this phase.
+whole-mammogram CBIS-DDSM binary classification baseline. Phase 1 contains the
+patient-safe data pipeline. Phase 2 adds the structurally verified
+EfficientNet-B0 plus Transformer classifier. Training remains intentionally out
+of scope until phase 3.
 
 The real-data phase 1 audit is recorded in
 [`docs/phase1_data_audit.md`](docs/phase1_data_audit.md).
+The locked model and explicit reproduction assumptions are recorded in
+[`docs/phase2_model_spec.md`](docs/phase2_model_spec.md).
 
 ## Locked data policy
 
@@ -67,3 +69,17 @@ explicitly:
 
 These settings are centralized in `configs/data.yaml`; they are not evidence
 about the unavailable original preprocessing.
+
+## Model architecture smoke test
+
+The smoke test defaults to random initialization and therefore performs no
+network download:
+
+```powershell
+python scripts/smoke_model.py --device auto --batch-size 1
+```
+
+It verifies the `1280 x 8 x 8` B0 feature map, `512 x 8 x 8` projection, 64
+spatial tokens, four-layer/eight-head Transformer, one-logit output, and a finite
+backward pass. Pass `--pretrained` only when an ImageNet weight download is
+intended. No optimizer step, checkpoint or metric evaluation occurs in phase 2.
