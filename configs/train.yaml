@@ -1,0 +1,52 @@
+{
+  "experiment": {
+    "name": "cbis_ddsm_calc_whole_mammogram_baseline_seed42",
+    "stage": 3,
+    "reproduction_assumptions": [
+      "AdamW optimizer with learning rate 1e-4 and weight decay 1e-4",
+      "ReduceLROnPlateau scheduler monitored on validation ROC AUC",
+      "early stopping on validation ROC AUC with patience 10",
+      "gradient clipping at global norm 1.0"
+    ]
+  },
+  "training": {
+    "seed": 42,
+    "max_epochs": 50,
+    "batch_size": 16,
+    "num_workers": 4,
+    "pin_memory": true,
+    "persistent_workers": true,
+    "prefetch_factor": 2,
+    "mixed_precision": true,
+    "deterministic": true,
+    "gradient_clip_norm": 1.0,
+    "output_dir": "artifacts/training/baseline_seed42"
+  },
+  "loss": {
+    "name": "BCEWithLogitsLoss",
+    "pos_weight": 1.84
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "learning_rate": 0.0001,
+    "weight_decay": 0.0001
+  },
+  "scheduler": {
+    "name": "ReduceLROnPlateau",
+    "monitor": "val_roc_auc",
+    "mode": "max",
+    "factor": 0.5,
+    "patience": 3,
+    "min_learning_rate": 0.000001
+  },
+  "early_stopping": {
+    "monitor": "val_roc_auc",
+    "mode": "max",
+    "patience": 10,
+    "min_delta": 0.001
+  },
+  "logging": {
+    "tensorboard": true,
+    "save_validation_predictions": true
+  }
+}

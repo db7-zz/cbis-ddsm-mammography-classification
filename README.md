@@ -3,13 +3,18 @@
 This repository is a clean-room reproduction of the approved calcification-only,
 whole-mammogram CBIS-DDSM binary classification baseline. Phase 1 contains the
 patient-safe data pipeline. Phase 2 adds the structurally verified
-EfficientNet-B0 plus Transformer classifier. Training remains intentionally out
-of scope until phase 3.
+EfficientNet-B0 plus Transformer classifier. Phase 3 adds leakage-safe,
+checkpointed training and validation; final test evaluation remains reserved for
+phase 4.
 
 The real-data phase 1 audit is recorded in
 [`docs/phase1_data_audit.md`](docs/phase1_data_audit.md).
 The locked model and explicit reproduction assumptions are recorded in
 [`docs/phase2_model_spec.md`](docs/phase2_model_spec.md).
+The leakage-safe training protocol is recorded in
+[`docs/phase3_training_spec.md`](docs/phase3_training_spec.md).
+The completed seed-42 run is audited in
+[`docs/phase3_training_report.md`](docs/phase3_training_report.md).
 
 ## Locked data policy
 
@@ -83,3 +88,20 @@ It verifies the `1280 x 8 x 8` B0 feature map, `512 x 8 x 8` projection, 64
 spatial tokens, four-layer/eight-head Transformer, one-logit output, and a finite
 backward pass. Pass `--pretrained` only when an ImageNet weight download is
 intended. No optimizer step, checkpoint or metric evaluation occurs in phase 2.
+
+## Phase 3 training
+
+The training entry point reads only `artifacts/data/train.csv` and `val.csv`;
+the test split is reserved for phase 4. A full configured run is:
+
+```powershell
+python scripts/train.py `
+  --data-config configs/data.local.yaml `
+  --model-config configs/model.yaml `
+  --train-config configs/train.yaml `
+  --device cuda
+```
+
+The first run can download the official torchvision EfficientNet-B0 ImageNet
+weights. Training artifacts are written below `artifacts/training` and are not
+committed to Git.

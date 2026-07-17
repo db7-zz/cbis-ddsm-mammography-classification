@@ -15,19 +15,25 @@ from .model import (
     count_parameters,
     load_model_config,
 )
+from .metrics import BinaryMetrics, compute_binary_metrics
+from .training import TrainingConfig, load_training_config
 
 __all__ = [
     "DataIntegrityError",
     "EfficientNetTransformerClassifier",
     "MammogramDataset",
     "ModelConfig",
+    "BinaryMetrics",
     "SinusoidalPositionEncoding2D",
+    "TrainingConfig",
     "build_manifest",
     "build_model",
     "build_transform",
     "count_parameters",
+    "compute_binary_metrics",
     "load_mammogram",
     "load_model_config",
+    "load_training_config",
     "prepare_manifests",
     "split_official_train_by_patient",
 ]
