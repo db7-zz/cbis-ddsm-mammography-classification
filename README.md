@@ -4,8 +4,8 @@ This repository is a clean-room reproduction of the approved calcification-only,
 whole-mammogram CBIS-DDSM binary classification baseline. Phase 1 contains the
 patient-safe data pipeline. Phase 2 adds the structurally verified
 EfficientNet-B0 plus Transformer classifier. Phase 3 adds leakage-safe,
-checkpointed training and validation; final test evaluation remains reserved for
-phase 4.
+checkpointed training and validation. Phase 4 adds a validation-frozen threshold
+and one-time official test evaluation.
 
 The real-data phase 1 audit is recorded in
 [`docs/phase1_data_audit.md`](docs/phase1_data_audit.md).
@@ -15,6 +15,10 @@ The leakage-safe training protocol is recorded in
 [`docs/phase3_training_spec.md`](docs/phase3_training_spec.md).
 The completed seed-42 run is audited in
 [`docs/phase3_training_report.md`](docs/phase3_training_report.md).
+The locked final-evaluation protocol is recorded in
+[`docs/phase4_evaluation_spec.md`](docs/phase4_evaluation_spec.md).
+The completed one-time test result is audited in
+[`docs/phase4_evaluation_report.md`](docs/phase4_evaluation_report.md).
 
 ## Locked data policy
 
@@ -105,3 +109,20 @@ python scripts/train.py `
 The first run can download the official torchvision EfficientNet-B0 ImageNet
 weights. Training artifacts are written below `artifacts/training` and are not
 committed to Git.
+
+## Phase 4 final evaluation
+
+First, the validation-only workflow can be rehearsed without loading test data:
+
+```powershell
+python scripts/evaluate.py `
+  --threshold-only `
+  --output-dir artifacts/evaluation/threshold_rehearsal
+```
+
+The formal command is run only once, after tests and the threshold-only rehearsal
+pass. It freezes Youden's J threshold before the program can read `test.csv`:
+
+```powershell
+python scripts/evaluate.py --device cuda
+```
