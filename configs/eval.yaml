@@ -1,0 +1,22 @@
+{
+  "experiment": {
+    "name": "cbis_ddsm_calc_whole_mammogram_baseline_seed42_final_evaluation",
+    "stage": 4,
+    "reference_threshold": 0.4515
+  },
+  "evaluation": {
+    "seed": 42,
+    "batch_size": 16,
+    "num_workers": 4,
+    "pin_memory": true,
+    "persistent_workers": true,
+    "prefetch_factor": 2,
+    "mixed_precision": true,
+    "deterministic": true,
+    "threshold_method": "youden_j",
+    "threshold_tie_break": "higher_threshold",
+    "expected_validation_samples": 241,
+    "expected_test_samples": 284,
+    "output_dir": "artifacts/evaluation/baseline_seed42"
+  }
+}
