@@ -20,6 +20,26 @@ The locked final-evaluation protocol is recorded in
 The completed one-time test result is audited in
 [`docs/phase4_evaluation_report.md`](docs/phase4_evaluation_report.md).
 
+## 当前对话迁移交接入口
+
+阶段一至阶段四已经完成，阶段四正式产物已经冻结。阶段五目前只有待用户审核的规划，**尚未批准实施**；接手后不要直接训练、安装依赖或再次运行官方测试集。
+
+新的 Codex 对话应按顺序阅读和核验：
+
+1. [`AGENTS.md`](AGENTS.md)：仓库级操作边界；
+2. [`docs/HANDOFF.md`](docs/HANDOFF.md)：完整中文交接说明；
+3. [`docs/handoff_state.yaml`](docs/handoff_state.yaml)：机器可读的真实状态、指标与哈希；
+4. [`docs/research_plan_v2_post_baseline.md`](docs/research_plan_v2_post_baseline.md)：后基线研究路线；
+5. [`docs/phase5_preprocessing_resolution_spec.md`](docs/phase5_preprocessing_resolution_spec.md)：待审核的阶段五 spec。
+
+只读交接核验命令：
+
+```powershell
+& 'C:\nonsystem\DevTools\conda\envs\surf\python.exe' scripts\verify_handoff.py
+```
+
+详细接手步骤、正式指标、冻结策略、已知问题和未提交文件边界均以交接文档与状态文件为准。
+
 ## Locked data policy
 
 - Use only the official calcification description CSV files.

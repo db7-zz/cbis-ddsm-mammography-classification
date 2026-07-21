@@ -1,0 +1,170 @@
+schema_version: 1
+generated_date: "2026-07-21"
+status: "phase_1_to_4_complete_phase_5_draft_not_approved"
+
+repository:
+  name: "cbis-ddsm-mammography-classification"
+  remote: "https://github.com/db7-zz/cbis-ddsm-mammography-classification.git"
+  workspace: "D:/School Work/codex项目/surf"
+  default_branch: "main"
+  current_branch: "codex/phase-5-planning"
+  current_branch_remote_exists: true
+  checkout_note: "until merged, a fresh GitHub handoff must check out codex/phase-5-planning or inspect its PR"
+  main_head: "d6530e1f7a53fc131e3a15c6b39f7258599a49de"
+  phase4_implementation_commit: "56cdb1814e99523b797b7d7ce17ed5f058f95542"
+  tags:
+    phase1: "phase-1-data-pipeline"
+    phase2: "phase-2-model-architecture"
+    phase3: "phase-3-training-baseline"
+    phase4: "phase-4-final-evaluation"
+
+governance:
+  phase5_implementation_approved: false
+  training_authorized: false
+  dependency_install_authorized: false
+  commit_authorized: false
+  push_authorized: false
+  official_test_reuse_authorized: false
+  active_research_plan: "docs/research_plan_v2_post_baseline.md"
+  active_phase_spec: "docs/phase5_preprocessing_resolution_spec.md"
+  phase_spec_status: "draft_user_review_required"
+  original_research_plan_role: "historical_reference_only"
+
+environment:
+  conda_environment: "surf"
+  python_executable: "C:/nonsystem/DevTools/conda/envs/surf/python.exe"
+  python: "3.11.15"
+  torch: "2.9.1+cu128"
+  torchvision: "0.24.1+cu128"
+  cuda: "12.8"
+  gpu: "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+  approximate_gpu_memory_gb: 12
+  expected_test_count: 41
+  last_test_result: "41 passed"
+
+external_reference:
+  original_research_plan: "C:/nonsystem/shoolwork/S3/surf/soph/材料/research-plan.md"
+  original_research_plan_sha256: "9a25d44196a3b45dd3a0488e4dc2aec10a4efa3df07addb0e2f5b74737fb50e8"
+  role: "historical reference only; file was not modified"
+
+data:
+  reproduction_assumption: "calcification-only + whole mammogram"
+  sample_unit: "independent CC or MLO whole-mammogram view"
+  positive_label: "MALIGNANT"
+  negative_labels:
+    - "BENIGN"
+    - "BENIGN_WITHOUT_CALLBACK"
+  split_policy: "official test; official train grouped by patient_id"
+  patient_overlap:
+    train_val: 0
+    train_test: 0
+    val_test: 0
+  paths:
+    data_root: "D:/School Work/codex项目/数据集/dataset/cbis_ddsm"
+    idc_metadata_csv: "D:/School Work/codex项目/数据集/dataset/metadata/metadata.csv"
+    official_train_csv: "D:/School Work/codex项目/数据集/dataset/official_csv/calc_case_description_train_set.csv"
+    official_test_csv: "D:/School Work/codex项目/数据集/dataset/official_csv/calc_case_description_test_set.csv"
+    generated_manifests: "artifacts/data"
+  manifest_sha256: "f1c2a8709228087251bbd1b1d4a2ea55b2049c66458f3c8045096f460fb19758"
+  dicom_decode:
+    successful: 1511
+    total: 1511
+  splits:
+    train: {samples: 986, patients: 482, negative: 574, positive: 412}
+    validation: {samples: 241, patients: 120, negative: 144, positive: 97}
+    test: {samples: 284, patients: 151, negative: 165, positive: 119}
+
+model:
+  input_size: 256
+  backbone: "efficientnet_b0"
+  pretrained: true
+  backbone_output: "1280x8x8"
+  projection: "1x1 convolution, 1280 to 512"
+  tokens: 64
+  positional_encoding: "2D sinusoidal"
+  transformer_layers: 4
+  attention_heads: 8
+  feedforward_dim: 2048
+  dropout: 0.1
+  pooling: "mean + LayerNorm"
+  output_logits: 1
+  trainable_parameters: 17274493
+
+training:
+  output_dir: "artifacts/training/baseline_seed42"
+  seed: 42
+  loss: "BCEWithLogitsLoss"
+  pos_weight: 1.84
+  optimizer: "AdamW"
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  completed_epochs: 12
+  best_epoch: 12
+  stopped_early: true
+  best_val_roc_auc: 0.6586841351660939
+  best_val_pr_auc: 0.5337626574271375
+  final_train_loss: 0.1581050033934233
+  final_val_loss: 2.7057164991544984
+  test_split_loaded: false
+  checkpoint_sha256: "9b471183ea5d5b34365f2be0a5e5d401ef73dc56987847310679f364f1f3aabb"
+  validation_predictions_sha256: "ee93f8b758b7ad325dd12435350dfadd3edee6a3b70e0c9ec3e4ad94d6fdaa95"
+
+evaluation:
+  output_dir: "artifacts/evaluation/baseline_seed42"
+  threshold_source: "validation_youden_j"
+  threshold: 0.0482263415881329
+  reference_threshold: 0.4515
+  reference_threshold_used: false
+  official_test_samples: 284
+  test_inference_passes: 1
+  roc_auc: 0.7414311179017061
+  pr_auc: 0.6728686551306395
+  sensitivity: 0.7058823529411765
+  specificity: 0.6363636363636364
+  accuracy: 0.6654929577464789
+  balanced_accuracy: 0.6711229946524064
+  precision: 0.5833333333333334
+  f1: 0.6387832699619772
+  confusion_matrix: {tn: 105, fp: 60, fn: 35, tp: 84}
+  test_predictions_sha256: "678fd357e37043eac59fa73cd6c45d60bc39074d072a49e16098e3b942eaaa82"
+  historical_reference:
+    sample_count: 326
+    sample_unit: "abnormality rows; differs from current unique-image unit"
+    roc_auc: 0.7869
+    pr_auc: 0.6673
+    sensitivity: 0.806
+
+freeze:
+  git_tag: "phase-4-final-evaluation"
+  backup_dir: "backups/phase4_final_frozen_20260721"
+  file_count: 35
+  total_bytes: 417927198
+  backup_read_only_files: 35
+  formal_source_read_only_files: 22
+  hash_mismatches: 0
+  freeze_manifest_sha256: "61176600394d4abdfc62aad075c9c2aa1567f9f03e654ff6117d89e6a867de30"
+  raw_dicom_included: false
+  off_disk_disaster_recovery_complete: false
+
+handoff_publication:
+  committed_scope:
+    - ".gitignore"
+    - "AGENTS.md"
+    - "README.md"
+    - "docs/HANDOFF.md"
+    - "docs/handoff_state.yaml"
+    - "docs/phase4_artifact_freeze_record.md"
+    - "docs/phase5_preprocessing_resolution_spec.md"
+    - "docs/research_plan_v2_post_baseline.md"
+    - "scripts/freeze_phase4_artifacts.py"
+    - "scripts/verify_handoff.py"
+  user_owned_untracked:
+    - path: "w1/weekly report.docx"
+      action: "do not delete, move, stage, or edit without explicit approval"
+  generated_report_untracked:
+    - path: "reports/CBIS-DDSM乳腺钼靶分类基线复现_现有成果报告.docx"
+      action: "ask user whether it should be committed"
+
+next_required_user_decision:
+  action: "review and approve or revise the new research plan and phase 5 specification"
+  implementation_before_decision: false
