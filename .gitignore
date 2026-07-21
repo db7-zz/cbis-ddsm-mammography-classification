@@ -3,6 +3,7 @@ __pycache__/
 .pytest_cache/
 .coverage
 artifacts/
+backups/
 data/
 configs/data.local.yaml
 .github_known_hosts
