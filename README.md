@@ -20,6 +20,16 @@ The locked final-evaluation protocol is recorded in
 The completed one-time test result is audited in
 [`docs/phase4_evaluation_report.md`](docs/phase4_evaluation_report.md).
 
+## Versioning
+
+Phases 1-4 form the immutable reference baseline and are tagged
+`v1.0-baseline`. The tag points to the completed phase 4 merge commit and must
+not be moved or modified.
+
+All later research changes are developed on dedicated experimental branches.
+They remain separate from `main` unless explicitly reviewed and approved for a
+future release.
+
 ## Locked data policy
 
 - Use only the official calcification description CSV files.
