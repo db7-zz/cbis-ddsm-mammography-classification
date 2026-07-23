@@ -1,15 +1,15 @@
-schema_version: 1
-generated_date: "2026-07-22"
-status: "phase_1_to_5_complete_validation_only"
+schema_version: 2
+generated_date: "2026-07-23"
+status: "phase_1_to_5_complete_phase_6_initialized"
 
 repository:
   name: "cbis-ddsm-mammography-classification"
   remote: "https://github.com/db7-zz/cbis-ddsm-mammography-classification.git"
   workspace: "D:/School Work/codex项目/surf"
   default_branch: "main"
-  current_branch: "codex/phase-5-experiments"
+  current_branch: "phase-6-experiments"
   current_branch_remote_exists: true
-  checkout_note: "phase 1-4 are frozen at v1.0-baseline; phase 5 is published on codex/phase-5-experiments"
+  checkout_note: "main is frozen at v1.0-baseline; phase 5 is frozen on phase-5-final; active phase 6 work belongs on phase-6-experiments"
   main_head: "d6530e1f7a53fc131e3a15c6b39f7258599a49de"
   phase4_implementation_commit: "56cdb1814e99523b797b7d7ce17ed5f058f95542"
   tags:
@@ -19,16 +19,46 @@ repository:
     phase4: "phase-4-final-evaluation"
     baseline: "v1.0-baseline"
 
+branching:
+  policy: "docs/branching_policy.md"
+  main:
+    branch: "main"
+    commit: "d6530e1f7a53fc131e3a15c6b39f7258599a49de"
+    role: "immutable phase 1-4 baseline"
+    accepts_later_phase_merges: false
+    readme_contains_handoff_entry: false
+  phase5:
+    final_branch: "phase-5-final"
+    implementation_anchor: "4e3b807421933ae3f4cb70bcce65263f2757e53c"
+    status: "complete"
+  phase6:
+    experiments_branch: "phase-6-experiments"
+    based_on: "phase-5-final"
+    final_branch: "phase-6-final"
+    final_branch_exists: false
+    implementation_status: "not_started"
+  lifecycle:
+    experiments_pattern: "phase-N-experiments"
+    final_pattern: "phase-N-final"
+    next_phase_base_pattern: "phase-(N-1)-final"
+    merge_later_phases_to_main: false
+    branch_deletion_requires_explicit_approval: true
+    delete_branches_one_at_a_time: true
+
 governance:
   phase5_implementation_approved: true
-  training_authorized: true
+  phase5_status: "complete_validation_only"
+  phase6_spec_approved: false
+  phase6_implementation_authorized: false
+  training_authorized: false
   dependency_install_authorized: false
-  commit_authorized: true
-  push_authorized: true
+  commit_authorized: false
+  push_authorized: false
   official_test_reuse_authorized: false
   active_research_plan: "docs/research_plan_v2_post_baseline.md"
-  active_phase_spec: "docs/phase5_preprocessing_resolution_spec.md"
-  phase_spec_status: "completed_validation_only"
+  latest_completed_phase_spec: "docs/phase5_preprocessing_resolution_spec.md"
+  active_phase_spec: null
+  phase_spec_status: "phase6_spec_required"
   original_research_plan_role: "historical_reference_only"
 
 environment:
@@ -153,6 +183,7 @@ handoff_publication:
     - "AGENTS.md"
     - "README.md"
     - "docs/HANDOFF.md"
+    - "docs/branching_policy.md"
     - "docs/handoff_state.yaml"
     - "docs/phase4_artifact_freeze_record.md"
     - "docs/phase5_preprocessing_resolution_spec.md"
@@ -162,12 +193,14 @@ handoff_publication:
   user_owned_untracked:
     - path: "w1/weekly report.docx"
       action: "do not delete, move, stage, or edit without explicit approval"
+    - path: "w2/"
+      action: "do not delete, move, stage, or edit without explicit approval"
   generated_report_untracked:
     - path: "reports/CBIS-DDSM乳腺钼靶分类基线复现_现有成果报告.docx"
       action: "ask user whether it should be committed"
 
 next_required_user_decision:
-  action: "approve a separate phase 6 specification before any architecture work or new official-test use"
+  action: "review and approve a separate phase 6 specification before architecture work, training, dependency changes, commit, push, or official-test use"
   implementation_before_decision: false
 
 phase5_progress:
