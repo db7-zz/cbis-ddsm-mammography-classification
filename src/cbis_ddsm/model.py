@@ -45,8 +45,10 @@ class ModelConfig:
         return config
 
     def validate(self) -> None:
-        if self.input_size != 256:
-            raise ConfigurationError("The locked baseline input size is 256.")
+        if self.input_size not in {256, 384, 512}:
+            raise ConfigurationError(
+                "Phase 5 permits only input sizes 256, 384, and 512."
+            )
         if self.backbone != "efficientnet_b0":
             raise ConfigurationError("The locked baseline backbone is efficientnet_b0.")
         if not isinstance(self.pretrained, bool):

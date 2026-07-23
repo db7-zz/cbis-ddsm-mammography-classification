@@ -12,6 +12,35 @@ from PIL import Image, ImageOps
 from torch.utils.data import Dataset
 from torchvision import transforms
 from torchvision.transforms import InterpolationMode
+from torchvision.transforms import functional as transform_functional
+
+from .preprocessing import apply_spatial_preprocessing
+
+
+class _RandomGamma:
+    def __init__(self, probability: float, minimum: float, maximum: float) -> None:
+        self.probability = float(probability)
+        self.minimum = float(minimum)
+        self.maximum = float(maximum)
+
+    def __call__(self, image: Image.Image) -> Image.Image:
+        if float(torch.rand(())) >= self.probability:
+            return image
+        gamma = self.minimum + float(torch.rand(())) * (self.maximum - self.minimum)
+        return transform_functional.adjust_gamma(image, gamma)
+
+
+class _RandomContrast:
+    def __init__(self, probability: float, minimum: float, maximum: float) -> None:
+        self.probability = float(probability)
+        self.minimum = float(minimum)
+        self.maximum = float(maximum)
+
+    def __call__(self, image: Image.Image) -> Image.Image:
+        if float(torch.rand(())) >= self.probability:
+            return image
+        factor = self.minimum + float(torch.rand(())) * (self.maximum - self.minimum)
+        return transform_functional.adjust_contrast(image, factor)
 
 
 def _scale_to_uint8(array: np.ndarray, lower_percentile: float, upper_percentile: float) -> np.ndarray:
@@ -101,21 +130,56 @@ def build_transform(
     image_size: int = 256,
     horizontal_flip_probability: float = 0.0,
     rotation_degrees: float = 0.0,
+    affine_probability: float = 0.0,
+    affine_degrees: float = 0.0,
+    affine_translate_fraction: float = 0.0,
+    affine_scale_min: float = 1.0,
+    affine_scale_max: float = 1.0,
+    gamma_probability: float = 0.0,
+    gamma_min: float = 1.0,
+    gamma_max: float = 1.0,
+    contrast_probability: float = 0.0,
+    contrast_min: float = 1.0,
+    contrast_max: float = 1.0,
     imagenet_mean: tuple[float, float, float] = (0.485, 0.456, 0.406),
     imagenet_std: tuple[float, float, float] = (0.229, 0.224, 0.225),
+    resize: bool = True,
 ) -> Callable[[Image.Image], torch.Tensor]:
-    operations: list[Callable[..., Any]] = [
-        transforms.Resize(
-            (int(image_size), int(image_size)),
-            interpolation=InterpolationMode.BILINEAR,
-            antialias=True,
+    operations: list[Callable[..., Any]] = []
+    if resize:
+        operations.append(
+            transforms.Resize(
+                (int(image_size), int(image_size)),
+                interpolation=InterpolationMode.BILINEAR,
+                antialias=True,
+            )
         )
-    ]
     if train and horizontal_flip_probability > 0.0:
         operations.append(transforms.RandomHorizontalFlip(p=horizontal_flip_probability))
     if train and rotation_degrees > 0.0:
         operations.append(
             transforms.RandomRotation(rotation_degrees, interpolation=InterpolationMode.BILINEAR)
+        )
+    if train and affine_probability > 0.0:
+        operations.append(
+            transforms.RandomApply(
+                [
+                    transforms.RandomAffine(
+                        degrees=(-affine_degrees, affine_degrees),
+                        translate=(affine_translate_fraction, affine_translate_fraction),
+                        scale=(affine_scale_min, affine_scale_max),
+                        interpolation=InterpolationMode.BILINEAR,
+                        fill=0,
+                    )
+                ],
+                p=affine_probability,
+            )
+        )
+    if train and gamma_probability > 0.0:
+        operations.append(_RandomGamma(gamma_probability, gamma_min, gamma_max))
+    if train and contrast_probability > 0.0:
+        operations.append(
+            _RandomContrast(contrast_probability, contrast_min, contrast_max)
         )
     operations.extend([transforms.ToTensor(), transforms.Normalize(imagenet_mean, imagenet_std)])
     return transforms.Compose(operations)
@@ -146,6 +210,7 @@ class MammogramDataset(Dataset[dict[str, Any]]):
             frame = frame[frame["split"] == split]
         self.frame = frame.reset_index(drop=True)
         self.preprocessing = preprocessing or {}
+        self.spatial_mode = self.preprocessing.get("spatial_mode")
         self.transform = transform or build_transform(
             train=split == "train",
             image_size=int(self.preprocessing.get("image_size", 256)),
@@ -153,8 +218,32 @@ class MammogramDataset(Dataset[dict[str, Any]]):
                 self.preprocessing.get("train_horizontal_flip_probability", 0.0)
             ),
             rotation_degrees=float(self.preprocessing.get("train_rotation_degrees", 0.0)),
+            affine_probability=float(
+                self.preprocessing.get("train_affine_probability", 0.0)
+            ),
+            affine_degrees=float(self.preprocessing.get("train_affine_degrees", 0.0)),
+            affine_translate_fraction=float(
+                self.preprocessing.get("train_affine_translate_fraction", 0.0)
+            ),
+            affine_scale_min=float(
+                self.preprocessing.get("train_affine_scale_min", 1.0)
+            ),
+            affine_scale_max=float(
+                self.preprocessing.get("train_affine_scale_max", 1.0)
+            ),
+            gamma_probability=float(
+                self.preprocessing.get("train_gamma_probability", 0.0)
+            ),
+            gamma_min=float(self.preprocessing.get("train_gamma_min", 1.0)),
+            gamma_max=float(self.preprocessing.get("train_gamma_max", 1.0)),
+            contrast_probability=float(
+                self.preprocessing.get("train_contrast_probability", 0.0)
+            ),
+            contrast_min=float(self.preprocessing.get("train_contrast_min", 1.0)),
+            contrast_max=float(self.preprocessing.get("train_contrast_max", 1.0)),
             imagenet_mean=tuple(self.preprocessing.get("imagenet_mean", (0.485, 0.456, 0.406))),
             imagenet_std=tuple(self.preprocessing.get("imagenet_std", (0.229, 0.224, 0.225))),
+            resize=self.spatial_mode is None,
         )
 
     def __len__(self) -> int:
@@ -171,10 +260,31 @@ class MammogramDataset(Dataset[dict[str, Any]]):
             lower_percentile=float(self.preprocessing.get("lower_percentile", 0.5)),
             upper_percentile=float(self.preprocessing.get("upper_percentile", 99.5)),
         )
-        return {
-            "image": self.transform(image),
+        spatial = (
+            apply_spatial_preprocessing(image, self.preprocessing)
+            if self.spatial_mode is not None
+            else None
+        )
+        prepared_image = spatial.image if spatial is not None else image
+        item = {
+            "image": self.transform(prepared_image),
             "label": torch.tensor(float(row["label"]), dtype=torch.float32),
             "sample_id": str(row["sample_id"]),
             "patient_id": str(row["patient_id"]),
             "image_path": str(row["image_path"]),
         }
+        if spatial is not None:
+            item.update(
+                {
+                    "preprocessing_crop_box": torch.tensor(
+                        spatial.crop_box, dtype=torch.int64
+                    ),
+                    "preprocessing_foreground_fraction": float(
+                        spatial.foreground_fraction
+                    ),
+                    "preprocessing_used_crop": bool(spatial.used_crop),
+                    "preprocessing_fallback": bool(spatial.fallback),
+                    "preprocessing_fallback_reason": spatial.fallback_reason or "",
+                }
+            )
+        return item

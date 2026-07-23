@@ -72,3 +72,25 @@ def validate_data_config(config: dict[str, Any]) -> None:
     upper = float(preprocessing.get("upper_percentile", 99.5))
     if not 0.0 <= lower < upper <= 100.0:
         raise ConfigurationError("Percentiles must satisfy 0 <= lower < upper <= 100.")
+
+    spatial_mode = str(preprocessing.get("spatial_mode", "stretch"))
+    if spatial_mode not in {"stretch", "breast_crop_letterbox"}:
+        raise ConfigurationError(
+            "preprocessing.spatial_mode must be stretch or breast_crop_letterbox."
+        )
+    if spatial_mode == "breast_crop_letterbox":
+        margin = float(preprocessing.get("breast_margin_fraction", 0.02))
+        minimum = float(preprocessing.get("min_foreground_fraction", 0.15))
+        maximum = float(preprocessing.get("max_foreground_fraction", 0.95))
+        min_width = float(preprocessing.get("min_breast_width_fraction", 0.25))
+        min_height = float(preprocessing.get("min_breast_height_fraction", 0.25))
+        if not 0.0 <= margin < 0.5:
+            raise ConfigurationError("breast_margin_fraction must be in [0, 0.5).")
+        if not 0.0 <= minimum < maximum <= 1.0:
+            raise ConfigurationError(
+                "Foreground fractions must satisfy 0 <= minimum < maximum <= 1."
+            )
+        if not 0.0 < min_width <= 1.0 or not 0.0 < min_height <= 1.0:
+            raise ConfigurationError(
+                "Minimum breast dimension fractions must be in (0, 1]."
+            )

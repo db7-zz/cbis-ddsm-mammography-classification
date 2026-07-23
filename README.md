@@ -5,7 +5,9 @@ whole-mammogram CBIS-DDSM binary classification baseline. Phase 1 contains the
 patient-safe data pipeline. Phase 2 adds the structurally verified
 EfficientNet-B0 plus Transformer classifier. Phase 3 adds leakage-safe,
 checkpointed training and validation. Phase 4 adds a validation-frozen threshold
-and one-time official test evaluation.
+and one-time official test evaluation. Phase 5 adds validation-only
+breast-region preprocessing, input-resolution ablation, safe-augmentation
+screening, and multi-seed confirmation.
 
 The real-data phase 1 audit is recorded in
 [`docs/phase1_data_audit.md`](docs/phase1_data_audit.md).
@@ -20,25 +22,36 @@ The locked final-evaluation protocol is recorded in
 The completed one-time test result is audited in
 [`docs/phase4_evaluation_report.md`](docs/phase4_evaluation_report.md).
 
-## 当前对话迁移交接入口
+## Versioning and experimental development
 
-阶段一至阶段四已经完成，阶段四正式产物已经冻结。阶段五目前只有待用户审核的规划，**尚未批准实施**；接手后不要直接训练、安装依赖或再次运行官方测试集。
+Phases 1-4 form the immutable reference baseline and are tagged
+`v1.0-baseline`. All later research changes are developed on dedicated
+experimental branches; phase 5 is published on
+`codex/phase-5-experiments`.
 
-新的 Codex 对话应按顺序阅读和核验：
+The baseline tag must not be moved or modified. Phase 5 does not repeat or use
+the official test inference for model selection. Its conclusions are based only
+on the locked training and validation manifests.
 
-1. [`AGENTS.md`](AGENTS.md)：仓库级操作边界；
-2. [`docs/HANDOFF.md`](docs/HANDOFF.md)：完整中文交接说明；
-3. [`docs/handoff_state.yaml`](docs/handoff_state.yaml)：机器可读的真实状态、指标与哈希；
-4. [`docs/research_plan_v2_post_baseline.md`](docs/research_plan_v2_post_baseline.md)：后基线研究路线；
-5. [`docs/phase5_preprocessing_resolution_spec.md`](docs/phase5_preprocessing_resolution_spec.md)：待审核的阶段五 spec。
+## Phase 5 validation-only experiments
 
-只读交接核验命令：
+Phase 5 evaluates deterministic breast-region crop plus letterbox
+preprocessing, 256/384/512-pixel inputs, a conservative augmentation policy,
+and three model seeds. The selected candidate is a 384-pixel input without
+random augmentation.
 
-```powershell
-& 'C:\nonsystem\DevTools\conda\envs\surf\python.exe' scripts\verify_handoff.py
-```
+| Seed | Validation ROC AUC | Validation PR AUC |
+|---:|---:|---:|
+| 42 | 0.699563 | 0.616203 |
+| 2026 | 0.684779 | 0.580666 |
+| 3407 | 0.669709 | 0.547121 |
+| Mean | 0.684684 | 0.581330 |
+| Sample standard deviation | 0.014927 | 0.034546 |
 
-详细接手步骤、正式指标、冻结策略、已知问题和未提交文件边界均以交接文档与状态文件为准。
+The approved protocol is documented in
+[`docs/phase5_preprocessing_resolution_spec.md`](docs/phase5_preprocessing_resolution_spec.md),
+and the completed validation-only results are summarized in
+[`docs/phase5_progress_report.md`](docs/phase5_progress_report.md).
 
 ## Locked data policy
 

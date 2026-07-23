@@ -70,6 +70,7 @@ def test_locked_training_config_matches_phase3_specification() -> None:
     assert config.seed == 42
     assert config.max_epochs == 50
     assert config.batch_size == 16
+    assert config.gradient_accumulation_steps == 1
     assert config.pos_weight == pytest.approx(1.84)
     assert config.optimizer_name == "AdamW"
     assert config.learning_rate == pytest.approx(1e-4)
@@ -145,6 +146,42 @@ def test_run_epoch_updates_parameters_and_returns_all_samples() -> None:
     assert output.labels.shape == (4,)
     assert output.logits.shape == (4,)
     assert not torch.equal(before, model.classifier.weight.detach())
+
+
+def test_gradient_accumulation_matches_the_same_effective_batch() -> None:
+    torch.manual_seed(42)
+    reference = TinyModel()
+    accumulated = TinyModel()
+    accumulated.load_state_dict(reference.state_dict())
+    config = replace(
+        load_training_config(PROJECT_ROOT / "configs" / "train.yaml"),
+        num_workers=0,
+    )
+    reference_optimizer, _ = build_optimizer_scheduler(reference, config)
+    accumulated_optimizer, _ = build_optimizer_scheduler(accumulated, config)
+    criterion = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([1.84]))
+
+    run_epoch(
+        reference,
+        DataLoader(TinyDataset(), batch_size=2, shuffle=False),
+        criterion,
+        torch.device("cpu"),
+        optimizer=reference_optimizer,
+        gradient_clip_norm=1000.0,
+        gradient_accumulation_steps=1,
+    )
+    run_epoch(
+        accumulated,
+        DataLoader(TinyDataset(), batch_size=1, shuffle=False),
+        criterion,
+        torch.device("cpu"),
+        optimizer=accumulated_optimizer,
+        gradient_clip_norm=1000.0,
+        gradient_accumulation_steps=2,
+    )
+
+    for name, value in reference.state_dict().items():
+        assert torch.allclose(value, accumulated.state_dict()[name], atol=1e-7)
 
 
 def test_checkpoint_round_trip_restores_model_and_training_state(tmp_path: Path) -> None:

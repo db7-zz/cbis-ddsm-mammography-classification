@@ -1,14 +1,14 @@
 # CBIS-DDSM项目对话迁移交接
 
-生成日期：2026-07-21
+生成日期：2026-07-22
 用途：供全新Codex对话在不依赖旧聊天记录的情况下接手项目
-状态：阶段一至阶段四完成；阶段五规划待用户审核
+状态：阶段一至阶段四冻结为v1.0-baseline；阶段五Gate A至Gate D完成并批准发布
 
 ## 1. 接手后的第一条原则
 
-不要继续优化模型。先确认本文件、`handoff_state.yaml`、Git状态和冻结产物一致，再询问用户是否批准新的研究计划与阶段五spec。
+先确认本文件、`handoff_state.yaml`、Git状态和冻结产物一致，再按已批准的阶段五spec继续，不能扩展到阶段六。
 
-当前没有阶段五实施授权。不得因为已经存在spec就开始写预处理代码、安装OpenCV、训练384/512模型或读取官方测试集。
+阶段五已于2026-07-21获得实施授权，但未授权安装依赖、读取官方测试集、阶段六架构修改、commit或push。Gate C的P5-E01、P5-E02、P5-E03正式训练已于2026-07-22完成，全部只加载train/validation。
 
 ## 2. 仓库与Git真相
 
@@ -17,8 +17,9 @@
 - 默认分支：`main`
 - 阶段四合并提交：`d6530e1f7a53fc131e3a15c6b39f7258599a49de`
 - 阶段四实现提交：`56cdb1814e99523b797b7d7ce17ed5f058f95542`
-- 阶段四标签：`phase-4-final-evaluation`
-- 交接发布分支：`codex/phase-5-planning`
+- 正式基线标签：`v1.0-baseline`
+- 历史阶段四标签：`phase-4-final-evaluation`（与正式基线指向同一提交）
+- 阶段五实验分支：`codex/phase-5-experiments`
 - 该分支通过本次交接提交发布到远端。在合并到`main`之前，从GitHub接手的新对话必须先检出该分支或查看对应PR，不能只读取旧的`main`。
 
 已存在的阶段标签：
@@ -200,7 +201,7 @@ backups/phase4_final_frozen_20260721
 & 'C:\nonsystem\DevTools\conda\envs\surf\python.exe' scripts\verify_handoff.py
 ```
 
-交接时完整测试为`41 passed`。
+最近一次完整测试为`59 passed`。
 
 ## 9. 研究计划与下一阶段
 
@@ -218,9 +219,9 @@ C:\nonsystem\shoolwork\S3\surf\soph\材料\research-plan.md
 
 新的中文研究计划是`docs/research_plan_v2_post_baseline.md`。后续总体路线以V2为准；旧plan只作为历史设想和长期创新来源。
 
-阶段五spec是`docs/phase5_preprocessing_resolution_spec.md`，当前状态为“待用户审核，未批准实施”。其计划是先保持B0+Transformer架构固定，评估乳房区域crop+letterbox和256/384/512分辨率，再评估安全增强。阶段五明确禁止BiFPN、CBAM、V2S、Grad-CAM++和官方测试推理。
+阶段五spec是`docs/phase5_preprocessing_resolution_spec.md`，当前状态为“已获用户批准，实施中”。其计划是先保持B0+Transformer架构固定，评估乳房区域crop+letterbox和256/384/512分辨率，再评估安全增强。阶段五明确禁止BiFPN、CBAM、V2S、Grad-CAM++和官方测试推理。
 
-下一位Codex应先请用户审核spec中的九项决定，不得把本交接请求视为阶段五批准。
+Gate A至Gate D已经完成。最终候选为384输入、无增强；seed 42、2026、3407的validation ROC AUC均值/样本标准差为0.684684/0.014927，PR AUC为0.581330/0.034546。全部运行均记录`test_split_loaded=false`。权威进度见`docs/phase5_progress_report.md`。阶段五通过`codex/phase-5-experiments`发布；下一步必须先审批阶段六spec，不得自动读取test或进入阶段六。
 
 ## 10. 已知问题与不可误读事项
 
@@ -242,10 +243,10 @@ C:\nonsystem\shoolwork\S3\surf\soph\材料\research-plan.md
 3. 运行`git status -sb`，确认没有把`w1/`当作项目文件。
 4. 运行`git show phase-4-final-evaluation --no-patch`。
 5. 运行`python scripts/verify_handoff.py`。
-6. 运行完整pytest，预期41项通过。
+6. 运行完整pytest，当前预期59项通过。
 7. 不运行训练或评估命令。
-8. 向用户汇报已接手，并询问是否批准/修改研究计划V2与阶段五spec。
-9. 只有获得明确批准后，才为阶段五列出计划、文件和验证方法。
+8. 向用户汇报已接手及阶段五Gate A/B进度。
+9. 继续Gate C前确认用户当天允许的训练时间窗口；不得把阶段五批准扩展到阶段六。
 10. 未获得commit/push批准时，不操作Git远端。
 
 ## 12. 交接完成的定义
