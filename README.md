@@ -1,13 +1,10 @@
-# CBIS-DDSM calcification baseline reproduction
+# CBIS-DDSM phase 5 final validation baseline
 
-This repository is a clean-room reproduction of the approved calcification-only,
-whole-mammogram CBIS-DDSM binary classification baseline. Phase 1 contains the
-patient-safe data pipeline. Phase 2 adds the structurally verified
-EfficientNet-B0 plus Transformer classifier. Phase 3 adds leakage-safe,
-checkpointed training and validation. Phase 4 adds a validation-frozen threshold
-and one-time official test evaluation. Phase 5 adds validation-only
-breast-region preprocessing, input-resolution ablation, safe-augmentation
-screening, and multi-seed confirmation.
+This branch is the completed phase 5 result for the calcification-only,
+whole-mammogram CBIS-DDSM binary classification project. It inherits the frozen
+phase 1-4 reference baseline and adds validation-only breast-region
+preprocessing, input-resolution ablation, safe-augmentation screening, and
+multi-seed confirmation.
 
 The real-data phase 1 audit is recorded in
 [`docs/phase1_data_audit.md`](docs/phase1_data_audit.md).
@@ -22,23 +19,33 @@ The locked final-evaluation protocol is recorded in
 The completed one-time test result is audited in
 [`docs/phase4_evaluation_report.md`](docs/phase4_evaluation_report.md).
 
-## Versioning and experimental development
+## Branch role
 
-Phases 1-4 form the immutable reference baseline and are tagged
-`v1.0-baseline`. All later research changes are developed on dedicated
-experimental branches; phase 5 is published on
-`codex/phase-5-experiments`.
+Phases 1-4 remain frozen on `main` and are tagged `v1.0-baseline`. This
+`phase-5-final` branch is the immutable starting point for phase 6 work.
 
-The baseline tag must not be moved or modified. Phase 5 does not repeat or use
-the official test inference for model selection. Its conclusions are based only
-on the locked training and validation manifests.
+The baseline tag must not be moved or modified. Phase 5 did not repeat or use
+official test inference for model selection. All phase 5 conclusions are based
+only on the locked training and validation manifests.
 
-## Phase 5 validation-only experiments
+## Phase 5 completed work
 
-Phase 5 evaluates deterministic breast-region crop plus letterbox
-preprocessing, 256/384/512-pixel inputs, a conservative augmentation policy,
-and three model seeds. The selected candidate is a 384-pixel input without
-random augmentation.
+- Completed a deterministic breast-region crop-and-letterbox pipeline with
+  explicit fallback reasons.
+- Audited all 1,227 locked train/validation images: 1,217 used the detected
+  breast crop and 10 safely fell back to the complete image.
+- Completed CUDA memory smoke tests for 256, 384, and 512-pixel inputs while
+  keeping the effective batch size at 16.
+- Completed P5-E01, P5-E02, and P5-E03 resolution screening. Validation ROC AUC
+  selected the 384-pixel P5-E02 configuration.
+- Completed P5-E04 safe-augmentation screening. It did not improve on P5-E02,
+  so the final candidate uses no random augmentation.
+- Completed three-seed confirmation using seeds 42, 2026, and 3407.
+- Verified validation prediction IDs and recomputed ROC AUC and PR AUC from the
+  saved predictions.
+- Completed the project test suite with 59 passing tests and preserved the
+  frozen phase 1-4 artifacts.
+- Confirmed `test_split_loaded=false` throughout phase 5.
 
 | Seed | Validation ROC AUC | Validation PR AUC |
 |---:|---:|---:|
@@ -47,6 +54,10 @@ random augmentation.
 | 3407 | 0.669709 | 0.547121 |
 | Mean | 0.684684 | 0.581330 |
 | Sample standard deviation | 0.014927 | 0.034546 |
+
+The final phase 5 candidate is therefore the 384-pixel, crop-and-letterbox,
+no-random-augmentation configuration. No new official test metric is claimed
+for this branch.
 
 The approved protocol is documented in
 [`docs/phase5_preprocessing_resolution_spec.md`](docs/phase5_preprocessing_resolution_spec.md),
