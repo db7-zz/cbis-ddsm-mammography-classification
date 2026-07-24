@@ -1,15 +1,15 @@
 schema_version: 1
-generated_date: "2026-07-22"
-status: "phase_1_to_5_complete_validation_only"
+generated_date: "2026-07-24"
+status: "phase_1_to_6_complete_validation_only"
 
 repository:
   name: "cbis-ddsm-mammography-classification"
   remote: "https://github.com/db7-zz/cbis-ddsm-mammography-classification.git"
   workspace: "D:/School Work/codex项目/surf"
   default_branch: "main"
-  current_branch: "codex/phase-5-experiments"
+  current_branch: "codex/phase-6-bifpn-cbam"
   current_branch_remote_exists: true
-  checkout_note: "phase 1-4 are frozen at v1.0-baseline; phase 5 is published on codex/phase-5-experiments"
+  checkout_note: "phase 1-4 are frozen at v1.0-baseline; phase 5 is published; phase 6 is published on codex/phase-6-bifpn-cbam"
   main_head: "d6530e1f7a53fc131e3a15c6b39f7258599a49de"
   phase4_implementation_commit: "56cdb1814e99523b797b7d7ce17ed5f058f95542"
   tags:
@@ -21,14 +21,19 @@ repository:
 
 governance:
   phase5_implementation_approved: true
+  phase6_implementation_approved: true
+  phase6_training_authorized: true
+  phase7_implementation_approved: false
   training_authorized: true
   dependency_install_authorized: false
   commit_authorized: true
   push_authorized: true
   official_test_reuse_authorized: false
   active_research_plan: "docs/research_plan_v2_post_baseline.md"
-  active_phase_spec: "docs/phase5_preprocessing_resolution_spec.md"
-  phase_spec_status: "completed_validation_only"
+  active_phase_spec: "docs/phase6_bifpn_cbam_ablation_spec.md"
+  phase_spec_status: "phase6_completed_validation_only"
+  phase6_commit_authorized: true
+  phase6_push_authorized: true
   original_research_plan_role: "historical_reference_only"
 
 environment:
@@ -40,8 +45,8 @@ environment:
   cuda: "12.8"
   gpu: "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
   approximate_gpu_memory_gb: 12
-  expected_test_count: 59
-  last_test_result: "59 passed"
+  expected_test_count: 80
+  last_test_result: "80 passed"
 
 external_reference:
   original_research_plan: "C:/nonsystem/shoolwork/S3/surf/soph/材料/research-plan.md"
@@ -167,8 +172,48 @@ handoff_publication:
       action: "ask user whether it should be committed"
 
 next_required_user_decision:
-  action: "approve a separate phase 6 specification before any architecture work or new official-test use"
+  action: "review phase 6 report, then approve a separate phase 7 EfficientNet-V2S migration specification before any phase 7 implementation"
   implementation_before_decision: false
+
+phase6_progress:
+  approval_date: "2026-07-23"
+  implementation_started: true
+  formal_training_complete: true
+  gate_0: "complete"
+  gate_a_architecture_audit: "complete"
+  gate_b_memory_smoke: "complete"
+  gate_c_seed42_screening: "complete"
+  gate_d_multiseed_confirmation: "complete"
+  test_split_loaded: false
+  manifest_sha256:
+    train: "3443c220d76ff8e50e63d17d3a6c46681e28b4fe2510eb56b41ee3682a595716"
+    validation: "15e3611a765db01b1765cfcd45067046f7b81e41ea827179e1a81f501dae43d0"
+  bifpn_frozen_channels: 128
+  bifpn_frozen_repeats: 1
+  seed42_experiments:
+    P6-E01A_BiFPN_R1_C128_seed42: {status: "completed", best_epoch: 12, val_roc_auc: 0.6669172394043528, val_pr_auc: 0.535140333112728, peak_memory_mib: 1863.60}
+    P6-E01B_BiFPN_R2_C128_seed42: {status: "completed", best_epoch: 12, val_roc_auc: 0.6665950744558993, val_pr_auc: 0.5787494938076556, peak_memory_mib: 2098.56}
+    P6-E02_CBAM_seed42: {status: "completed", best_epoch: 3, val_roc_auc: 0.7098725658648339, val_pr_auc: 0.6009777478441461, peak_memory_mib: 1564.48}
+    P6-E03_BiFPN_CBAM_seed42: {status: "completed", best_epoch: 6, val_roc_auc: 0.6766537800687286, val_pr_auc: 0.5975603144316313, peak_memory_mib: 1872.90}
+  seed42_selected_experiment: "P6-E02_CBAM_seed42"
+  cbam_multiseed:
+    seed42: {status: "completed", best_epoch: 3, val_roc_auc: 0.7098725658648339, val_pr_auc: 0.6009777478441461}
+    seed2026: {status: "completed", best_epoch: 7, val_roc_auc: 0.659077892325315, val_pr_auc: 0.5342257711597547}
+    seed3407: {status: "completed", best_epoch: 17, val_roc_auc: 0.6650558419243986, val_pr_auc: 0.5782228795306094}
+    val_roc_auc_mean: 0.6780021000381825
+    val_roc_auc_sample_std: 0.027762004869211324
+    val_pr_auc_mean: 0.5711421328448367
+    val_pr_auc_sample_std: 0.033934633164945896
+  phase5_control_val_roc_auc_mean: 0.684684039709813
+  cbam_minus_phase5_val_roc_auc_mean: -0.0066819396716304436
+  final_validation_best_experiment: "P5-E02"
+  final_validation_best_reason: "CBAM seed-42 gain did not reproduce; three-seed mean is lower than phase 5 control"
+  phase7_automatically_authorized: false
+  publication:
+    authorization_date: "2026-07-24"
+    branch: "codex/phase-6-bifpn-cbam"
+    commit_authorized: true
+    push_authorized: true
 
 phase5_progress:
   approval_date: "2026-07-21"

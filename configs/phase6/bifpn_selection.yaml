@@ -1,0 +1,28 @@
+stage: 6
+selection_status: frozen
+selection_date: 2026-07-23
+primary_metric: validation_roc_auc
+simplification_threshold: 0.005
+seed: 42
+test_split_loaded: false
+candidates:
+  P6-E01A_BiFPN_R1_C128_seed42:
+    bifpn_channels: 128
+    bifpn_repeats: 1
+    best_epoch: 12
+    val_roc_auc: 0.6669172394043528
+    val_pr_auc: 0.535140333112728
+    best_checkpoint_sha256: 56f338a30c82ad5cd315f9f2f4af1193d92e3fbafbe79db73cfc941f6c7d93ed
+  P6-E01B_BiFPN_R2_C128_seed42:
+    bifpn_channels: 128
+    bifpn_repeats: 2
+    best_epoch: 12
+    val_roc_auc: 0.6665950744558993
+    val_pr_auc: 0.5787494938076556
+    best_checkpoint_sha256: d60ac060aeb32099e7932c45ece106a4af9fda01f18711d36cec3acc453175f2
+absolute_roc_auc_difference: 0.0003221649484534961
+selected:
+  experiment_id: P6-E01A_BiFPN_R1_C128_seed42
+  bifpn_channels: 128
+  bifpn_repeats: 1
+reason: R1 and R2 differ by less than 0.005, so the approved simplification rule selects R1.

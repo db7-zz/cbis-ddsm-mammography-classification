@@ -1,12 +1,54 @@
 # CBIS-DDSM项目对话迁移交接
 
-生成日期：2026-07-22
+生成日期：2026-07-24
 用途：供全新Codex对话在不依赖旧聊天记录的情况下接手项目
-状态：阶段一至阶段四冻结为v1.0-baseline；阶段五Gate A至Gate D完成并批准发布
+状态：阶段一至阶段四冻结为v1.0-baseline；阶段五与阶段六Gate均已完成；阶段六成果已获授权发布到`codex/phase-6-bifpn-cbam`
+
+## 0. 2026-07-24阶段六完成更新（优先于下文历史交接叙述）
+
+阶段六已在分支`codex/phase-6-bifpn-cbam`完成Gate 0至Gate D，起点为阶段五提交`4e3b807421933ae3f4cb70bcce65263f2757e53c`。用户已于2026-07-24明确授权提交并推送阶段六代码、配置、测试和文档。
+
+阶段六只加载锁定的train/validation：
+
+```text
+train.csv SHA-256: 3443c220d76ff8e50e63d17d3a6c46681e28b4fe2510eb56b41ee3682a595716
+val.csv   SHA-256: 15e3611a765db01b1765cfcd45067046f7b81e41ea827179e1a81f501dae43d0
+```
+
+正式seed 42消融结果：
+
+| 候选 | Validation ROC AUC |
+|---|---:|
+| 阶段五P5-E02冻结对照 | 0.6995632875 |
+| BiFPN C128/R1 | 0.6669172394 |
+| BiFPN C128/R2 | 0.6665950745 |
+| CBAM | 0.7098725659 |
+| BiFPN C128/R1 + CBAM | 0.6766537801 |
+
+BiFPN R1/R2差异小于`0.005`，按批准的简化规则冻结R1。seed 42选择CBAM进入多seed确认，但三seed结果为：
+
+| Seed | 阶段五对照ROC AUC | 阶段六CBAM ROC AUC | 差值 |
+|---:|---:|---:|---:|
+| 42 | 0.6995632875 | 0.7098725659 | +0.0103092784 |
+| 2026 | 0.6847794960 | 0.6590778923 | -0.0257016037 |
+| 3407 | 0.6697093356 | 0.6650558419 | -0.0046534937 |
+| 均值 | 0.6846840397 | 0.6780021000 | -0.0066819397 |
+
+因此阶段六validation经验最佳模型保留阶段五P5-E02；CBAM的seed 42提升没有跨随机种子复现。BiFPN和CBAM定义仍作为阶段七V2S迁移研究的冻结输入，这不代表阶段七已经获批。
+
+权威阶段六记录：
+
+- `docs/phase6_bifpn_cbam_ablation_spec.md`
+- `docs/phase6_progress_report.md`
+- `artifacts/experiments/phase6/experiment_registry.csv`
+- 完整pytest：`80 passed`
+- 所有正式运行：`test_split_loaded=false`
+
+下一步必须先起草并由用户批准阶段七EfficientNet-V2S迁移spec。不得把阶段六授权扩展到阶段七、官方test、依赖安装、commit或push。
 
 ## 1. 接手后的第一条原则
 
-先确认本文件、`handoff_state.yaml`、Git状态和冻结产物一致，再按已批准的阶段五spec继续，不能扩展到阶段六。
+先确认本文件、`handoff_state.yaml`、Git状态和冻结产物一致，再以阶段六完成记录为当前事实。不得在未批准阶段七spec前开始V2S迁移。
 
 阶段五已于2026-07-21获得实施授权，但未授权安装依赖、读取官方测试集、阶段六架构修改、commit或push。Gate C的P5-E01、P5-E02、P5-E03正式训练已于2026-07-22完成，全部只加载train/validation。
 
@@ -20,6 +62,7 @@
 - 正式基线标签：`v1.0-baseline`
 - 历史阶段四标签：`phase-4-final-evaluation`（与正式基线指向同一提交）
 - 阶段五实验分支：`codex/phase-5-experiments`
+- 阶段六最终分支：`codex/phase-6-bifpn-cbam`
 - 该分支通过本次交接提交发布到远端。在合并到`main`之前，从GitHub接手的新对话必须先检出该分支或查看对应PR，不能只读取旧的`main`。
 
 已存在的阶段标签：
@@ -201,7 +244,7 @@ backups/phase4_final_frozen_20260721
 & 'C:\nonsystem\DevTools\conda\envs\surf\python.exe' scripts\verify_handoff.py
 ```
 
-最近一次完整测试为`59 passed`。
+最近一次完整测试为`80 passed`。
 
 ## 9. 研究计划与下一阶段
 
@@ -219,9 +262,11 @@ C:\nonsystem\shoolwork\S3\surf\soph\材料\research-plan.md
 
 新的中文研究计划是`docs/research_plan_v2_post_baseline.md`。后续总体路线以V2为准；旧plan只作为历史设想和长期创新来源。
 
-阶段五spec是`docs/phase5_preprocessing_resolution_spec.md`，当前状态为“已获用户批准，实施中”。其计划是先保持B0+Transformer架构固定，评估乳房区域crop+letterbox和256/384/512分辨率，再评估安全增强。阶段五明确禁止BiFPN、CBAM、V2S、Grad-CAM++和官方测试推理。
+阶段五spec为`docs/phase5_preprocessing_resolution_spec.md`，Gate A至Gate D已经完成。最终候选为384输入、无增强；seed 42、2026、3407的validation ROC AUC均值/样本标准差为0.684684/0.014927，PR AUC为0.581330/0.034546。权威进度见`docs/phase5_progress_report.md`。
 
-Gate A至Gate D已经完成。最终候选为384输入、无增强；seed 42、2026、3407的validation ROC AUC均值/样本标准差为0.684684/0.014927，PR AUC为0.581330/0.034546。全部运行均记录`test_split_loaded=false`。权威进度见`docs/phase5_progress_report.md`。阶段五通过`codex/phase-5-experiments`发布；下一步必须先审批阶段六spec，不得自动读取test或进入阶段六。
+阶段六spec为`docs/phase6_bifpn_cbam_ablation_spec.md`，Gate 0至Gate D已经完成。BiFPN和CBAM在B0上的权威结果与最终结论见`docs/phase6_progress_report.md`。阶段六多seed确认后仍保留阶段五P5-E02为validation经验最佳模型。
+
+下一步是单独起草并审批阶段七EfficientNet-V2S迁移spec。不得自动读取test、进入阶段七、commit或push。
 
 ## 10. 已知问题与不可误读事项
 
@@ -242,12 +287,12 @@ Gate A至Gate D已经完成。最终候选为384输入、无增强；seed 42、2
 2. 阅读本文件和`docs/handoff_state.yaml`。
 3. 运行`git status -sb`，确认没有把`w1/`当作项目文件。
 4. 运行`git show phase-4-final-evaluation --no-patch`。
-5. 运行`python scripts/verify_handoff.py`。
-6. 运行完整pytest，当前预期59项通过。
-7. 不运行训练或评估命令。
-8. 向用户汇报已接手及阶段五Gate A/B进度。
-9. 继续Gate C前确认用户当天允许的训练时间窗口；不得把阶段五批准扩展到阶段六。
-10. 未获得commit/push批准时，不操作Git远端。
+5. 验证锁定`train.csv`与`val.csv`哈希；当前阶段六隔离worktree没有联合`manifest.csv`，不得为运行旧版`verify_handoff.py`而复制或解析test记录。
+6. 运行完整pytest，当前预期`80 passed`。
+7. 不运行训练、评估或官方test命令。
+8. 向用户汇报阶段六Gate 0至Gate D已完成及多seed结论。
+9. 进入阶段七前必须先起草阶段七spec并获得用户明确批准。
+10. 阶段六发布只允许显式暂存本阶段文件；阶段七仍未获批。
 
 ## 12. 交接完成的定义
 
@@ -258,5 +303,6 @@ Gate A至Gate D已经完成。最终候选为384输入、无增强；seed 42、2
 - 哪些结果是历史参考，哪些是本次真实结果？
 - 正式产物在哪里，如何验证未被修改？
 - 当前工作区有哪些未提交或用户拥有的文件？
-- 阶段五是否获批、允许改什么、禁止做什么？
+- 阶段五与阶段六是否完成，validation经验最佳模型为何仍是P5-E02？
+- 阶段七是否获批、允许改什么、禁止做什么？
 - 下一步必须向用户请求什么决定？

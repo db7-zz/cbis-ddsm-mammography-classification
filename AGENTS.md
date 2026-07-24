@@ -14,6 +14,10 @@
 - 阶段五spec已于2026-07-21获得用户明确批准，Gate A至Gate D均已完成。
 - 阶段五最终候选为384输入、无随机增强；三随机种子确认仅使用train/validation。
 - 用户已明确授权将`v1.0-baseline`标签和阶段五实验分支发布到GitHub；该授权不包含依赖安装、官方测试推理或阶段六架构改进。
+- 阶段六spec已于2026-07-23获得用户明确批准，Gate 0至Gate D均已完成；全部正式运行只使用train/validation并记录`test_split_loaded=false`。
+- 阶段六在EfficientNet-B0上冻结BiFPN C128/R1；CBAM的seed 42提升未通过三随机种子确认，validation经验最佳模型仍保留阶段五P5-E02。
+- 用户已于2026-07-24授权将阶段六成果提交并推送到`codex/phase-6-bifpn-cbam`；该授权不包含官方测试推理、依赖安装或阶段七EfficientNet-V2S实施。
+- 阶段七尚未获批。开始任何V2S代码或训练前必须先起草阶段七spec并获得用户明确批准。
 
 ## 数据和实验纪律
 
