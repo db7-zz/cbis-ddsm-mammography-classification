@@ -2,11 +2,11 @@
 
 生成日期：2026-07-24
 用途：供全新Codex对话在不依赖旧聊天记录的情况下接手项目
-状态：阶段一至阶段四冻结为v1.0-baseline；阶段五与阶段六Gate均已完成；阶段六成果已获授权发布到`codex/phase-6-bifpn-cbam`
+状态：阶段一至阶段四冻结为v1.0-baseline；阶段五与阶段六Gate均已完成；阶段六成果发布在`phase-6-final`
 
 ## 0. 2026-07-24阶段六完成更新（优先于下文历史交接叙述）
 
-阶段六已在分支`codex/phase-6-bifpn-cbam`完成Gate 0至Gate D，起点为阶段五提交`4e3b807421933ae3f4cb70bcce65263f2757e53c`。用户已于2026-07-24明确授权提交并推送阶段六代码、配置、测试和文档。
+阶段六已在最终分支`phase-6-final`完成Gate 0至Gate D，起点为阶段五提交`4e3b807421933ae3f4cb70bcce65263f2757e53c`。用户已于2026-07-24明确授权提交并推送阶段六代码、配置、测试和文档。
 
 阶段六只加载锁定的train/validation：
 
@@ -62,7 +62,7 @@ BiFPN R1/R2差异小于`0.005`，按批准的简化规则冻结R1。seed 42选�
 - 正式基线标签：`v1.0-baseline`
 - 历史阶段四标签：`phase-4-final-evaluation`（与正式基线指向同一提交）
 - 阶段五实验分支：`codex/phase-5-experiments`
-- 阶段六最终分支：`codex/phase-6-bifpn-cbam`
+- 阶段六最终分支：`phase-6-final`
 - 该分支通过本次交接提交发布到远端。在合并到`main`之前，从GitHub接手的新对话必须先检出该分支或查看对应PR，不能只读取旧的`main`。
 
 已存在的阶段标签：

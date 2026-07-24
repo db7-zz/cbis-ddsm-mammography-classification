@@ -11,7 +11,7 @@
 
 ## 二、Gate 0：实施就绪
 
-- 已从提交`4e3b807421933ae3f4cb70bcce65263f2757e53c`创建本地分支`codex/phase-6-bifpn-cbam`；
+- 已从提交`4e3b807421933ae3f4cb70bcce65263f2757e53c`创建阶段六工作分支，完成后更名为最终分支`phase-6-final`；
 - 只恢复了锁定的`train.csv`和`val.csv`，没有复制或读取test manifest；
 - train SHA-256：`3443C220D76FF8E50E63D17D3A6C46681E28B4FE2510EB56B41EE3682A595716`；
 - validation SHA-256：`15E3611A765DB01B1765CFCD45067046F7B81E41EA827179E1A81F501DAE43D0`；
@@ -414,4 +414,4 @@ EfficientNet-B0 + Transformer
 
 最终完整pytest为`80 passed`。旧版`scripts/verify_handoff.py`仍要求联合`artifacts/data/manifest.csv`，而当前阶段六隔离worktree按数据纪律只恢复锁定的`train.csv`和`val.csv`，没有复制或解析包含官方test记录的联合manifest，因此该旧脚本在读取缺失文件时中止。阶段六没有为通过该脚本而扩大数据读取范围；其train/validation清单哈希、患者隔离、逐样本预测和`test_split_loaded=false`均已通过阶段六专用门与独立核验。
 
-用户已于2026-07-24明确授权将阶段六代码、配置、测试和文档提交并推送到最终分支`codex/phase-6-bifpn-cbam`。该发布不包含Git忽略的checkpoint、TensorBoard日志或本地实验目录，也不授权阶段七、官方test或依赖安装。
+用户已于2026-07-24明确授权将阶段六代码、配置、测试和文档发布到最终分支`phase-6-final`，并删除其他阶段六相关分支。该发布不包含Git忽略的checkpoint、TensorBoard日志或本地实验目录，也不授权阶段七、官方test或依赖安装。

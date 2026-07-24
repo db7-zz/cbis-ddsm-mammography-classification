@@ -7,9 +7,9 @@ repository:
   remote: "https://github.com/db7-zz/cbis-ddsm-mammography-classification.git"
   workspace: "D:/School Work/codex项目/surf"
   default_branch: "main"
-  current_branch: "codex/phase-6-bifpn-cbam"
+  current_branch: "phase-6-final"
   current_branch_remote_exists: true
-  checkout_note: "phase 1-4 are frozen at v1.0-baseline; phase 5 is published; phase 6 is published on codex/phase-6-bifpn-cbam"
+  checkout_note: "phase 1-4 are frozen at v1.0-baseline; phase 5 is published; phase 6 is published on phase-6-final"
   main_head: "d6530e1f7a53fc131e3a15c6b39f7258599a49de"
   phase4_implementation_commit: "56cdb1814e99523b797b7d7ce17ed5f058f95542"
   tags:
@@ -211,7 +211,7 @@ phase6_progress:
   phase7_automatically_authorized: false
   publication:
     authorization_date: "2026-07-24"
-    branch: "codex/phase-6-bifpn-cbam"
+    branch: "phase-6-final"
     commit_authorized: true
     push_authorized: true
 
