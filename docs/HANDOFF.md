@@ -1,8 +1,52 @@
 # CBIS-DDSM项目对话迁移交接
 
-生成日期：2026-07-24
+生成日期：2026-07-25
 用途：供全新Codex对话在不依赖旧聊天记录的情况下接手项目
-状态：阶段一至阶段四冻结为v1.0-baseline；阶段五与阶段六Gate均已完成；阶段六成果发布在`phase-6-final`
+状态：阶段一至阶段四冻结为v1.0-baseline；阶段五至阶段七Gate均已完成；阶段七发布在`phase-7-final`
+
+## 0A. 2026-07-25阶段七完成更新（最高优先级）
+
+阶段七spec及独立`V2S + CBAM`修订均已获得用户明确批准。实施起点为阶段六最终提交`3c10d2d2bc9139a15f262b33c259eb8d1d500230`。Gate 0至Gate D全部完成，用户已于2026-07-25授权将当前成果提交并推送到最终分支`phase-7-final`。
+
+阶段七严格只加载锁定的train/validation：
+
+```text
+train.csv SHA-256: 3443c220d76ff8e50e63d17d3a6c46681e28b4fe2510eb56b41ee3682a595716
+val.csv   SHA-256: 15e3611a765db01b1765cfcd45067046f7b81e41ea827179e1a81f501dae43d0
+```
+
+seed 42完整矩阵：
+
+| 候选 | Validation ROC AUC |
+|---|---:|
+| P7-E00：阶段五P5-E02冻结对照 | 0.6995632875 |
+| P7-E01：V2S | 0.7179266896 |
+| P7-E02：V2S + BiFPN | 0.6966280069 |
+| P7-E03：V2S + CBAM | 0.6873210195 |
+| P7-E04：V2S + BiFPN + CBAM | 0.6679553265 |
+
+P7-E01为seed 42经验候选，且与P7-E04、P7-E00的差值均达到spec多seed门槛。因此P7-E01和P7-E04均完成seed 42、2026、3407确认：
+
+| 模型 | 三seed ROC AUC均值 | 样本标准差 | 相对阶段五P5-E02均值 |
+|---|---:|---:|---:|
+| 阶段五P5-E02 | 0.6846840397 | 0.0149272049 | — |
+| P7-E01 V2S | 0.6968069874 | 0.0252671825 | +0.0121229477 |
+| P7-E04 V2S + BiFPN + CBAM | 0.6684445399 | 0.0144141602 | -0.0162394998 |
+
+阶段七最终必须保留两个不同定义：
+
+- 导师规定核心方法：P7-E04，`EfficientNet-V2S + BiFPN + CBAM + Transformer`；
+- validation经验最佳模型：P7-E01，`EfficientNet-V2S + Transformer`。
+
+权威记录：
+
+- `docs/phase7_efficientnet_v2s_migration_spec.md`
+- `docs/phase7_progress_report.md`
+- `artifacts/experiments/phase7/experiment_registry.csv`
+- 完整pytest：`100 passed in 10.93s`（全部阶段七正式训练完成后复核）
+- 所有正式运行：`test_split_loaded=false`
+
+阶段七未读取官方test、未安装新增依赖、未覆盖阶段四至阶段六冻结产物。阶段七发布授权不包含进入阶段八或复用官方test。
 
 ## 0. 2026-07-24阶段六完成更新（优先于下文历史交接叙述）
 
@@ -34,7 +78,7 @@ BiFPN R1/R2差异小于`0.005`，按批准的简化规则冻结R1。seed 42选�
 | 3407 | 0.6697093356 | 0.6650558419 | -0.0046534937 |
 | 均值 | 0.6846840397 | 0.6780021000 | -0.0066819397 |
 
-因此阶段六validation经验最佳模型保留阶段五P5-E02；CBAM的seed 42提升没有跨随机种子复现。BiFPN和CBAM定义仍作为阶段七V2S迁移研究的冻结输入，这不代表阶段七已经获批。
+因此阶段六validation经验最佳模型保留阶段五P5-E02；CBAM的seed 42提升没有跨随机种子复现。BiFPN和CBAM定义后来作为阶段七V2S迁移研究的冻结输入；阶段七批准与完成情况以0A节为准。
 
 权威阶段六记录：
 
@@ -44,11 +88,11 @@ BiFPN R1/R2差异小于`0.005`，按批准的简化规则冻结R1。seed 42选�
 - 完整pytest：`80 passed`
 - 所有正式运行：`test_split_loaded=false`
 
-下一步必须先起草并由用户批准阶段七EfficientNet-V2S迁移spec。不得把阶段六授权扩展到阶段七、官方test、依赖安装、commit或push。
+本节是阶段六完成时的历史状态；后续阶段七批准与完成情况以0A节为准。
 
 ## 1. 接手后的第一条原则
 
-先确认本文件、`handoff_state.yaml`、Git状态和冻结产物一致，再以阶段六完成记录为当前事实。不得在未批准阶段七spec前开始V2S迁移。
+先确认本文件、`handoff_state.yaml`、Git状态和冻结产物一致，再以0A节阶段七完成记录为当前事实。不得把阶段七批准扩展到阶段八、官方test、commit或push。
 
 阶段五已于2026-07-21获得实施授权，但未授权安装依赖、读取官方测试集、阶段六架构修改、commit或push。Gate C的P5-E01、P5-E02、P5-E03正式训练已于2026-07-22完成，全部只加载train/validation。
 
@@ -63,7 +107,8 @@ BiFPN R1/R2差异小于`0.005`，按批准的简化规则冻结R1。seed 42选�
 - 历史阶段四标签：`phase-4-final-evaluation`（与正式基线指向同一提交）
 - 阶段五实验分支：`codex/phase-5-experiments`
 - 阶段六最终分支：`phase-6-final`
-- 该分支通过本次交接提交发布到远端。在合并到`main`之前，从GitHub接手的新对话必须先检出该分支或查看对应PR，不能只读取旧的`main`。
+- 阶段七最终分支：`phase-7-final`
+- 阶段七通过本次交接提交发布到远端；在合并到`main`之前，从GitHub接手的新对话必须检出`phase-7-final`或查看对应PR，不能只读取旧的`main`。
 
 已存在的阶段标签：
 
@@ -244,7 +289,7 @@ backups/phase4_final_frozen_20260721
 & 'C:\nonsystem\DevTools\conda\envs\surf\python.exe' scripts\verify_handoff.py
 ```
 
-最近一次完整测试为`80 passed`。
+全部阶段七正式训练完成后的最近一次完整测试为`100 passed in 10.93s`。
 
 ## 9. 研究计划与下一阶段
 
@@ -264,9 +309,11 @@ C:\nonsystem\shoolwork\S3\surf\soph\材料\research-plan.md
 
 阶段五spec为`docs/phase5_preprocessing_resolution_spec.md`，Gate A至Gate D已经完成。最终候选为384输入、无增强；seed 42、2026、3407的validation ROC AUC均值/样本标准差为0.684684/0.014927，PR AUC为0.581330/0.034546。权威进度见`docs/phase5_progress_report.md`。
 
-阶段六spec为`docs/phase6_bifpn_cbam_ablation_spec.md`，Gate 0至Gate D已经完成。BiFPN和CBAM在B0上的权威结果与最终结论见`docs/phase6_progress_report.md`。阶段六多seed确认后仍保留阶段五P5-E02为validation经验最佳模型。
+阶段六spec为`docs/phase6_bifpn_cbam_ablation_spec.md`，Gate 0至Gate D已经完成。BiFPN和CBAM在B0上的权威结果与最终结论见`docs/phase6_progress_report.md`。阶段六多seed确认后仍保留阶段五P5-E02为当时的validation经验最佳模型。
 
-下一步是单独起草并审批阶段七EfficientNet-V2S迁移spec。不得自动读取test、进入阶段七、commit或push。
+阶段七spec为`docs/phase7_efficientnet_v2s_migration_spec.md`，Gate 0至Gate D已经完成。最终结论见`docs/phase7_progress_report.md`：规定核心方法为P7-E04，validation经验最佳模型更新为P7-E01。
+
+下一步需要用户决定是否起草阶段八spec。不得自动读取test或进入阶段八；后续额外提交或推送仍需新的明确授权。
 
 ## 10. 已知问题与不可误读事项
 
@@ -288,11 +335,11 @@ C:\nonsystem\shoolwork\S3\surf\soph\材料\research-plan.md
 3. 运行`git status -sb`，确认没有把`w1/`当作项目文件。
 4. 运行`git show phase-4-final-evaluation --no-patch`。
 5. 验证锁定`train.csv`与`val.csv`哈希；当前阶段六隔离worktree没有联合`manifest.csv`，不得为运行旧版`verify_handoff.py`而复制或解析test记录。
-6. 运行完整pytest，当前预期`80 passed`。
+6. 使用`surf`运行完整pytest，当前预期`100 passed`。
 7. 不运行训练、评估或官方test命令。
-8. 向用户汇报阶段六Gate 0至Gate D已完成及多seed结论。
-9. 进入阶段七前必须先起草阶段七spec并获得用户明确批准。
-10. 阶段六发布只允许显式暂存本阶段文件；阶段七仍未获批。
+8. 向用户汇报阶段七Gate 0至Gate D已完成及P7-E01/P7-E04双重结论。
+9. 进入阶段八前必须先起草阶段八spec并获得用户明确批准。
+10. 阶段七已授权发布到`phase-7-final`；后续额外提交或推送仍需新的明确授权。
 
 ## 12. 交接完成的定义
 
@@ -303,6 +350,6 @@ C:\nonsystem\shoolwork\S3\surf\soph\材料\research-plan.md
 - 哪些结果是历史参考，哪些是本次真实结果？
 - 正式产物在哪里，如何验证未被修改？
 - 当前工作区有哪些未提交或用户拥有的文件？
-- 阶段五与阶段六是否完成，validation经验最佳模型为何仍是P5-E02？
-- 阶段七是否获批、允许改什么、禁止做什么？
+- 阶段五至阶段七是否完成，validation经验最佳模型为何更新为P7-E01？
+- 阶段七规定核心方法为何仍是P7-E04，且为何不同于经验最佳模型？
 - 下一步必须向用户请求什么决定？

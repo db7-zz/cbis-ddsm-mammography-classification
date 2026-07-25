@@ -1,15 +1,15 @@
 schema_version: 1
-generated_date: "2026-07-24"
-status: "phase_1_to_6_complete_validation_only"
+generated_date: "2026-07-25"
+status: "phase_1_to_7_complete_validation_only"
 
 repository:
   name: "cbis-ddsm-mammography-classification"
   remote: "https://github.com/db7-zz/cbis-ddsm-mammography-classification.git"
   workspace: "D:/School Work/codex项目/surf"
   default_branch: "main"
-  current_branch: "phase-6-final"
+  current_branch: "phase-7-final"
   current_branch_remote_exists: true
-  checkout_note: "phase 1-4 are frozen at v1.0-baseline; phase 5 is published; phase 6 is published on phase-6-final"
+  checkout_note: "phase 1-4 are frozen at v1.0-baseline; phase 5 is published; phase 6 is published on phase-6-final; phase 7 is published on phase-7-final"
   main_head: "d6530e1f7a53fc131e3a15c6b39f7258599a49de"
   phase4_implementation_commit: "56cdb1814e99523b797b7d7ce17ed5f058f95542"
   tags:
@@ -23,15 +23,17 @@ governance:
   phase5_implementation_approved: true
   phase6_implementation_approved: true
   phase6_training_authorized: true
-  phase7_implementation_approved: false
-  training_authorized: true
+  phase7_implementation_approved: true
+  phase7_training_authorized: true
+  phase7_dependency_install_authorized: true
+  training_authorized: false
   dependency_install_authorized: false
   commit_authorized: true
   push_authorized: true
   official_test_reuse_authorized: false
   active_research_plan: "docs/research_plan_v2_post_baseline.md"
-  active_phase_spec: "docs/phase6_bifpn_cbam_ablation_spec.md"
-  phase_spec_status: "phase6_completed_validation_only"
+  active_phase_spec: "docs/phase7_efficientnet_v2s_migration_spec.md"
+  phase_spec_status: "phase7_completed_validation_only"
   phase6_commit_authorized: true
   phase6_push_authorized: true
   original_research_plan_role: "historical_reference_only"
@@ -45,8 +47,8 @@ environment:
   cuda: "12.8"
   gpu: "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
   approximate_gpu_memory_gb: 12
-  expected_test_count: 80
-  last_test_result: "80 passed"
+  expected_test_count: 100
+  last_test_result: "100 passed in 10.93s after all phase 7 formal training"
 
 external_reference:
   original_research_plan: "C:/nonsystem/shoolwork/S3/surf/soph/材料/research-plan.md"
@@ -172,8 +174,68 @@ handoff_publication:
       action: "ask user whether it should be committed"
 
 next_required_user_decision:
-  action: "review phase 6 report, then approve a separate phase 7 EfficientNet-V2S migration specification before any phase 7 implementation"
+  action: "review phase 7 report and separately approve drafting a phase 8 specification before any phase 8 implementation"
   implementation_before_decision: false
+
+phase7_progress:
+  approval_date: "2026-07-24"
+  amendment_approval_date: "2026-07-24"
+  implementation_branch: "codex/phase-7-v2s"
+  implementation_start_commit: "3c10d2d2bc9139a15f262b33c259eb8d1d500230"
+  implementation_started: true
+  formal_training_complete: true
+  gate_0: "complete"
+  gate_a_architecture_audit: "complete"
+  gate_b_memory_smoke: "complete"
+  gate_c_seed42_screening: "complete"
+  gate_d_multiseed_confirmation: "complete"
+  test_split_loaded: false
+  dependency_installed: false
+  official_test_read: false
+  manifest_sha256:
+    train: "3443c220d76ff8e50e63d17d3a6c46681e28b4fe2510eb56b41ee3682a595716"
+    validation: "15e3611a765db01b1765cfcd45067046f7b81e41ea827179e1a81f501dae43d0"
+  pretrained_weights:
+    enum: "EfficientNet_V2_S_Weights.DEFAULT"
+    size_bytes: 86721253
+    sha256: "dd5fe13b1d60ec15317ccc8ca158186e134d3366c3dde9cb9a4e301f2dc66c74"
+  architecture_audit_v2_sha256: "3AB7EA6D1B49080535A7C824512CF40E50617E76610046AF05012F2AC8C3BCE9"
+  memory_smoke_v2_sha256: "5E40E0CB87742110798209C7DA3585D1B4912E34EF96C399BF49B6DF12FC76CE"
+  seed42_experiments:
+    P7-E00_P5-E02_control: {status: "referenced_no_retrain", val_roc_auc: 0.6995632875143184, val_pr_auc: 0.6162027463925146}
+    P7-E01_V2S_seed42: {status: "completed", completed_epochs: 14, best_epoch: 4, val_roc_auc: 0.717926689576174, val_pr_auc: 0.6056954281153017, peak_memory_mib: 2603.58}
+    P7-E02_V2S_BiFPN_R1_C128_seed42: {status: "completed", completed_epochs: 14, best_epoch: 4, val_roc_auc: 0.6966280068728523, val_pr_auc: 0.5540184093586537, peak_memory_mib: 2906.97}
+    P7-E03_V2S_CBAM_seed42: {status: "completed", completed_epochs: 22, best_epoch: 12, val_roc_auc: 0.6873210194730813, val_pr_auc: 0.5987404971036088, peak_memory_mib: 2605.80}
+    P7-E04_V2S_BiFPN_CBAM_seed42: {status: "completed", completed_epochs: 14, best_epoch: 4, val_roc_auc: 0.6679553264604811, val_pr_auc: 0.5554048312928487, peak_memory_mib: 2911.69}
+  seed42_empirical_candidate: "P7-E01_V2S"
+  prescribed_core_method: "P7-E04_V2S_BiFPN_CBAM"
+  empirical_candidate_multiseed:
+    seed42: {status: "completed", best_epoch: 4, val_roc_auc: 0.717926689576174, val_pr_auc: 0.6056954281153017}
+    seed2026: {status: "completed", best_epoch: 7, val_roc_auc: 0.7036798396334479, val_pr_auc: 0.5897810953796264}
+    seed3407: {status: "completed", best_epoch: 13, val_roc_auc: 0.6688144329896907, val_pr_auc: 0.5742412437972194}
+    val_roc_auc_mean: 0.6968069873997709
+    val_roc_auc_sample_std: 0.02526718247299476
+    val_pr_auc_mean: 0.5899059224307158
+    val_pr_auc_sample_std: 0.015727463690102323
+  prescribed_core_multiseed:
+    seed42: {status: "completed", best_epoch: 4, val_roc_auc: 0.6679553264604811, val_pr_auc: 0.5554048312928487}
+    seed2026: {status: "completed", best_epoch: 5, val_roc_auc: 0.6542812142038945, val_pr_auc: 0.5466131346374439}
+    seed3407: {status: "completed", best_epoch: 15, val_roc_auc: 0.6830970790378007, val_pr_auc: 0.6417966507892587}
+    val_roc_auc_mean: 0.6684445399007254
+    val_roc_auc_sample_std: 0.01441416018622225
+    val_pr_auc_mean: 0.5812715389065171
+    val_pr_auc_sample_std: 0.05260028858128023
+  phase5_control_val_roc_auc_mean: 0.684684039709813
+  empirical_candidate_minus_phase5_val_roc_auc_mean: 0.0121229476899579
+  prescribed_core_minus_phase5_val_roc_auc_mean: -0.0162394998090876
+  final_validation_best_experiment: "P7-E01_V2S"
+  final_validation_best_reason: "three-seed mean exceeds the phase 5 P5-E02 control; BiFPN and CBAM migrations did not improve the V2S backbone candidate"
+  experiment_registry_sha256: "D82C7358A77F2094F7C658496EBF3B9A8DB950D2611B450F8EF389D8D89EC5AE"
+  publication:
+    authorization_date: "2026-07-25"
+    branch: "phase-7-final"
+    commit_authorized: true
+    push_authorized: true
 
 phase6_progress:
   approval_date: "2026-07-23"

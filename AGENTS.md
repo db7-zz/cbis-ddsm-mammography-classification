@@ -17,7 +17,9 @@
 - 阶段六spec已于2026-07-23获得用户明确批准，Gate 0至Gate D均已完成；全部正式运行只使用train/validation并记录`test_split_loaded=false`。
 - 阶段六在EfficientNet-B0上冻结BiFPN C128/R1；CBAM的seed 42提升未通过三随机种子确认，validation经验最佳模型仍保留阶段五P5-E02。
 - 用户已于2026-07-24授权将阶段六成果发布到最终分支`phase-6-final`，并删除其他阶段六相关分支；该授权不包含官方测试推理、依赖安装或阶段七EfficientNet-V2S实施。
-- 阶段七尚未获批。开始任何V2S代码或训练前必须先起草阶段七spec并获得用户明确批准。
+- 阶段七spec及独立`V2S + CBAM`修订已于2026-07-24获得用户明确批准；Gate 0至Gate D均已完成，全部正式运行只使用train/validation并记录`test_split_loaded=false`。
+- 阶段七规定核心方法为`EfficientNet-V2S + BiFPN + CBAM + Transformer`，三seed validation ROC AUC为`0.6684445399 ± 0.0144141602`；validation经验最佳模型为`EfficientNet-V2S + Transformer`，三seed结果为`0.6968069874 ± 0.0252671825`。
+- 用户已于2026-07-25授权将阶段七当前成果提交并推送到最终分支`phase-7-final`；该授权不包含阶段八或再次读取官方test。
 
 ## 数据和实验纪律
 

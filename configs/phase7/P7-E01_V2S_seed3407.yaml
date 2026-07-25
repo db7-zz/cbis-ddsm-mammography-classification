@@ -1,0 +1,69 @@
+experiment:
+  id: P7-E01_V2S_seed3407
+  stage: 7
+  variant: v2s
+  purpose: multiseed confirmation of the seed42 empirical-best V2S candidate
+preprocessing:
+  image_size: 384
+  dicom_apply_modality_lut: true
+  dicom_apply_voi_lut: true
+  lower_percentile: 0.5
+  upper_percentile: 99.5
+  spatial_mode: breast_crop_letterbox
+  breast_margin_fraction: 0.02
+  min_foreground_fraction: 0.15
+  max_foreground_fraction: 0.95
+  min_breast_width_fraction: 0.25
+  min_breast_height_fraction: 0.25
+  train_horizontal_flip_probability: 0.0
+  train_rotation_degrees: 0.0
+  train_affine_probability: 0.0
+  train_gamma_probability: 0.0
+  train_contrast_probability: 0.0
+  imagenet_mean: [0.485, 0.456, 0.406]
+  imagenet_std: [0.229, 0.224, 0.225]
+model:
+  input_size: 384
+  backbone: efficientnet_v2_s
+  pretrained: true
+  freeze_backbone: false
+  projection_dim: 512
+  transformer_layers: 4
+  attention_heads: 8
+  feedforward_dim: 2048
+  dropout: 0.1
+  activation: gelu
+  positional_encoding: sinusoidal_2d
+  pooling: mean
+  output_logits: 1
+  bifpn_enabled: false
+  bifpn_channels: 128
+  bifpn_repeats: 0
+  token_grid_size: 12
+  cbam_enabled: false
+  cbam_reduction: 16
+  cbam_spatial_kernel: 7
+training:
+  seed: 3407
+  max_epochs: 50
+  batch_size: 8
+  gradient_accumulation_steps: 2
+  num_workers: 4
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 2
+  mixed_precision: true
+  deterministic: true
+  gradient_clip_norm: 1.0
+  output_dir: artifacts/experiments/phase7/P7-E01_V2S_seed3407
+loss: {name: BCEWithLogitsLoss, pos_weight: 1.84}
+optimizer: {name: AdamW, learning_rate: 0.0001, weight_decay: 0.0001}
+scheduler:
+  name: ReduceLROnPlateau
+  monitor: val_roc_auc
+  mode: max
+  factor: 0.5
+  patience: 3
+  min_learning_rate: 0.000001
+early_stopping: {monitor: val_roc_auc, mode: max, patience: 10, min_delta: 0.001}
+logging: {tensorboard: true, save_validation_predictions: true}

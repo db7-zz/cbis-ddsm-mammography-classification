@@ -1,8 +1,8 @@
 # 研究计划 V2：严格基线完成后的改进研究
 
-状态：阶段五与阶段六Gate均已完成；阶段六多seed结论保留阶段五候选作为validation经验最佳模型
+状态：阶段五至阶段七Gate均已完成；阶段七validation经验最佳模型为P7-E01 V2S
 创建日期：2026-07-21
-最近修订：2026-07-24
+最近修订：2026-07-25
 适用范围：阶段五及后续研究
 
 ## 1. 与原研究计划的关系
@@ -119,7 +119,8 @@ BiFPN实验必须实现统一通道宽度的双向融合，并在高分辨率下
 
 1. `EfficientNet-V2S + Transformer`：保持384输入、预处理和训练选择规则不变，单独评估从B0切换到V2S的backbone贡献。
 2. `EfficientNet-V2S + BiFPN + Transformer`：把阶段六冻结的多尺度方案迁移到V2S，验证BiFPN在新骨干上的增量贡献。
-3. `EfficientNet-V2S + BiFPN + CBAM + Transformer`：在上一项基础上加入阶段六冻结的CBAM方案，测量CBAM对最终架构的增量贡献，并形成导师要求的最终核心方法。
+3. `EfficientNet-V2S + CBAM + Transformer`：在不包含BiFPN时独立迁移阶段六冻结CBAM，形成完整的V2S二因素消融。
+4. `EfficientNet-V2S + BiFPN + CBAM + Transformer`：组合阶段六冻结的BiFPN和CBAM方案，测量模块交互并形成导师要求的最终核心方法。
 
 阶段七应引用阶段五和阶段六已经完成的B0对照，不重复训练相同的B0配置。V2S不是B0的原位参数替换；迁移前必须重新声明V2S的P2-P5端点与通道形状，并完成参数量、token数量、显存和预训练权重加载审计。
 
@@ -129,6 +130,14 @@ BiFPN实验必须实现统一通道宽度的双向融合，并在高分辨率下
 - **验证集经验最佳模型**：严格按照预先声明的validation ROC AUC规则选出的配置。
 
 如果规定的核心方法没有超过某个B0消融模型，仍须如实报告两者，不得通过查看官方测试结果改变模型选择或隐去负结果。
+
+阶段七现已完成。三seed validation ROC AUC结果为：
+
+- P7-E01 V2S：`0.6968069874 ± 0.0252671825`，成为validation经验最佳模型；
+- P7-E04 V2S + BiFPN + CBAM：`0.6684445399 ± 0.0144141602`，仍保留为规定核心方法；
+- 阶段五P5-E02对照：`0.6846840397 ± 0.0149272049`。
+
+这说明V2S独立backbone升级在三seed均值上优于阶段五对照，而冻结BiFPN/CBAM迁移没有提升V2S候选。该结论只使用train/validation，未读取官方test。
 
 ### 阶段八：可解释性与外部验证
 
@@ -172,10 +181,10 @@ BiFPN实验必须实现统一通道宽度的双向融合，并在高分辨率下
 | M5 | 仅验证集分辨率与安全增强消融 | 已完成Gate C |
 | M6 | 阶段五最终候选多随机种子确认 | 已完成Gate D |
 | M7 | 阶段五验证进度报告 | 已完成 |
-| M8 | B0上的BiFPN、CBAM及组合消融阶段六spec | 已批准，Gate A/B完成 |
+| M8 | B0上的BiFPN、CBAM及组合消融阶段六spec | 已完成 |
 | M9 | B0模块独立贡献与组合效果验证 | 已完成Gate C/D；CBAM多seed均值未提升，保留阶段五候选 |
-| M10 | V2S backbone独立切换与多尺度迁移 | 未开始 |
-| M11 | V2S + BiFPN + CBAM最终核心模型确认 | 未开始 |
+| M10 | V2S backbone独立切换与多尺度迁移 | 已完成Gate A至Gate C |
+| M11 | V2S + BiFPN + CBAM最终核心模型确认 | 已完成Gate D；规定核心P7-E04，经验最佳P7-E01 |
 
 ## 9. 预期研究贡献
 
