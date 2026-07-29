@@ -1,0 +1,31 @@
+schema_version: 1
+stage: 8
+expected_validation_samples: 241
+expected_test_samples: 284
+expected_test_patients: 151
+expected_test_manifest_sha256: ad631667905ec737f6d60efffd608eb6aaf280f3d2bc85864ed43da1b56cf8a0
+threshold_method: youden_j
+threshold_tie_break: higher_threshold
+authorized_model_ids:
+  - P7-E01_V2S_seed42
+  - P7-E04_V2S_BiFPN_CBAM_seed42
+threshold_output_dirs:
+  P7-E01_V2S_seed42: artifacts/experiments/phase8/thresholds/P7-E01
+  P7-E04_V2S_BiFPN_CBAM_seed42: artifacts/experiments/phase8/thresholds/P7-E04
+official_test_output_dirs:
+  P7-E01_V2S_seed42: artifacts/experiments/phase8/official_test/P7-E01_seed42
+  P7-E04_V2S_BiFPN_CBAM_seed42: artifacts/experiments/phase8/official_test/P7-E04_seed42
+project_test_inference_passes_before_phase8: 1
+maximum_new_test_inference_passes: 2
+project_test_inference_passes_after_success: 3
+bootstrap:
+  unit: patient_id
+  valid_replicates: 2000
+  seed: 42
+  confidence_level: 0.95
+forbidden:
+  training: true
+  threshold_refit_on_test: true
+  test_time_augmentation: true
+  ensemble: true
+  additional_models_or_seeds: true

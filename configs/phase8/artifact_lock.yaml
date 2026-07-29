@@ -1,0 +1,46 @@
+schema_version: 1
+stage: 8
+source_commit: a534698a68de836dc89340c5c52bd535289aca7e
+manifests:
+  train.csv: 3443c220d76ff8e50e63d17d3a6c46681e28b4fe2510eb56b41ee3682a595716
+  val.csv: 15e3611a765db01b1765cfcd45067046f7b81e41ea827179e1a81f501dae43d0
+models:
+  P5-E02_seed42:
+    family: phase5
+    role: gradcam_only
+    seed: 42
+    config_path: configs/phase5/P5-E02_seed42.yaml
+    checkpoint_path: artifacts/experiments/phase5/P5-E02_seed42/best.pt
+    checkpoint_sha256: 5c99fdc049fe2abd8bd33d45464656e5aed6bac0ca3c93da0d6a4d0c2ae2a41e
+    validation_predictions_path: artifacts/experiments/phase5/P5-E02_seed42/val_predictions_best.csv
+    validation_predictions_sha256: a07aadcdb2d1261a3e155d34db7eb24c0ed3e06a72e5f8b0a0ca3fab697d849e
+    expected_best_epoch: 3
+    expected_val_roc_auc: 0.6995632875143184
+    expected_val_pr_auc: 0.6162027463925146
+    official_test_allowed: false
+  P7-E01_V2S_seed42:
+    family: phase7
+    role: validation_empirical_best
+    seed: 42
+    config_path: configs/phase7/P7-E01_V2S_seed42.yaml
+    checkpoint_path: artifacts/experiments/phase7/P7-E01_V2S_seed42/best.pt
+    checkpoint_sha256: c59ff946b2f9732ee0684306e68c9490fcbd493bcd9babb18a22c45e0da784c8
+    validation_predictions_path: artifacts/experiments/phase7/P7-E01_V2S_seed42/val_predictions_best.csv
+    validation_predictions_sha256: 9e23702d927a9cf695381f639a5ce5f687e9af739735577af27e21bb596a7d3a
+    expected_best_epoch: 4
+    expected_val_roc_auc: 0.717926689576174
+    expected_val_pr_auc: 0.6056954281153017
+    official_test_allowed: true
+  P7-E04_V2S_BiFPN_CBAM_seed42:
+    family: phase7
+    role: prescribed_core_method
+    seed: 42
+    config_path: configs/phase7/P7-E04_V2S_BiFPN_CBAM_seed42.yaml
+    checkpoint_path: artifacts/experiments/phase7/P7-E04_V2S_BiFPN_CBAM_seed42/best.pt
+    checkpoint_sha256: cffa435dc3dffebf8ef584decea7d06336873200465425021af1aefe901b14d8
+    validation_predictions_path: artifacts/experiments/phase7/P7-E04_V2S_BiFPN_CBAM_seed42/val_predictions_best.csv
+    validation_predictions_sha256: 45d6e2894ed35b1e4dcf35bd8066b872a4b23bd8a794a6c0d66d50df0b99eb6b
+    expected_best_epoch: 4
+    expected_val_roc_auc: 0.6679553264604811
+    expected_val_pr_auc: 0.5554048312928487
+    official_test_allowed: true

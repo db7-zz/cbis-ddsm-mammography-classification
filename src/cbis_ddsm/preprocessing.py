@@ -61,6 +61,13 @@ def _largest_foreground_component(grayscale: np.ndarray) -> np.ndarray:
     return labels == largest_label
 
 
+def breast_foreground_mask(image: Image.Image) -> np.ndarray:
+    """Return the same largest foreground component used to define the breast crop."""
+
+    grayscale = np.asarray(image.convert("RGB").convert("L"), dtype=np.uint8)
+    return _largest_foreground_component(grayscale)
+
+
 def letterbox_image(
     image: Image.Image,
     size: int,
@@ -110,8 +117,7 @@ def crop_breast_region(
     if not 0.0 < min_width_fraction <= 1.0 or not 0.0 < min_height_fraction <= 1.0:
         raise ValueError("Minimum dimension fractions must be in (0, 1].")
 
-    grayscale = np.asarray(rgb.convert("L"), dtype=np.uint8)
-    component = _largest_foreground_component(grayscale)
+    component = breast_foreground_mask(rgb)
     foreground_pixels = int(component.sum())
     if foreground_pixels == 0:
         return SpatialPreprocessingResult(

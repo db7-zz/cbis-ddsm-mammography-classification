@@ -1,0 +1,98 @@
+schema_version: 1
+stage: 8
+gate: D
+dataset_id: INbreast_Release_1.0
+
+layout:
+  raw_subdir: raw
+  archive_name: INbreast Release 1.0.zip
+  dicom_subdir: AllDICOMs
+  xml_subdir: AllXML
+  roi_subdir: AllROI
+  reports_subdir: MedicalReports
+  summary_csv: INbreast.csv
+  summary_xls: INbreast.xls
+  readme: README.txt
+  publication_pdf: inbreast.pdf
+
+expected:
+  archive_sha256: a536da310985458906f645d8aa998451244f975385e85e941d30c9afc6134db6
+  dicom_images: 410
+  annotation_xml_files: 343
+  osirix_roi_files: 343
+  medical_report_files: 117
+  summary_rows: 410
+  supported_views:
+    - CC
+    - MLO
+  known_birads_values:
+    - "1"
+    - "2"
+    - "3"
+    - "4a"
+    - "4b"
+    - "4c"
+    - "5"
+    - "6"
+  calcification_roi_names:
+    - calcification
+    - calcifications
+    - cluster
+
+candidate_birads_mapping:
+  negative:
+    - "1"
+    - "2"
+    - "3"
+  positive:
+    - "4a"
+    - "4b"
+    - "4c"
+    - "5"
+    - "6"
+  status: exploratory_only_requires_post_audit_user_confirmation
+
+audit_lock:
+  outcome_path: artifacts/experiments/phase8/external/inbreast/audit_attempt2/outcome.json
+  outcome_sha256: ce390321b1262d0ce2424c5c75a344e277cd9a11be130cbf2c35d0078f2ef900
+  candidate_manifest_path: artifacts/experiments/phase8/external/inbreast/audit_attempt2/candidate_manifest.csv
+  candidate_manifest_sha256: e02a180291df89971b34295d48284b60ef289880a71e0bcf9b0cdc8acbb7d93a
+  expected_candidate_images: 314
+  expected_candidate_patients: 91
+  expected_candidate_negatives: 227
+  expected_candidate_positives: 87
+
+authorized_model_ids:
+  - P7-E01_V2S_seed42
+  - P7-E04_V2S_BiFPN_CBAM_seed42
+
+bootstrap:
+  unit: patient_id
+  valid_replicates: 2000
+  seed: 42
+  confidence_level: 0.95
+
+runtime:
+  seed: 42
+  batch_size: 8
+  num_workers: 4
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 2
+  mixed_precision: true
+  deterministic: true
+
+output:
+  audit_dir: artifacts/experiments/phase8/external/inbreast/audit_attempt2
+  formal_dir: artifacts/experiments/phase8/external/inbreast/formal
+
+forbidden:
+  training: true
+  fine_tuning: true
+  domain_adaptation: true
+  threshold_refit: true
+  test_time_augmentation: true
+  ensemble: true
+  official_test_reload: true
+  raw_data_mutation: true
+  p5_external_classification: true
