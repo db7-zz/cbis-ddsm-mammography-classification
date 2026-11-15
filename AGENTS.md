@@ -8,6 +8,12 @@
 
 ## 当前阶段边界
 
+- 用户已于 2026-11-15 明确要求“按照之前的规格把这次更新上传到github”，单独授权提交并推送阶段九已完成成果到规格指定的 `codex/cnn-only-supplement` 分支。授权仅覆盖阶段九代码、配置、测试、规格、报告及交接记录；不包含 main 合并、官方 test、重训、依赖安装或上传本地数据/checkpoint/无关用户文件。
+- 用户已于 2026-11-15 明确要求“按照之前的规格把这次更新上传到github”，单独授权提交并推送阶段九已完成成果到规格指定的 `codex/cnn-only-supplement` 分支。授权仅覆盖阶段九代码、配置、测试、规格、报告及交接记录；不包含 main 合并、官方 test、重训、依赖安装或上传本地数据/checkpoint/无关用户文件。
+- 2026-11-12 当前补实验以 `docs/phase9_cnn_only_control_spec.md` 为准，用户已明确批准实施并连续完成 V2S CNN-only 的 seed 42、2026、3407 三次 train/validation 训练及已有 P7-E01/P7-E04 对照汇总；不包含官方 test、依赖安装、B0 CNN-only、commit 或 push。
+- 阶段九 Gate 0 至 Gate D 已于 2026-11-12 全部完成。CNN-only validation ROC AUC 为 `0.7040378007 ± 0.0036455833`，PR AUC 为 `0.5745328636 ± 0.0115089597`；Transformer 的 ROC AUC 增益跨 seed 不一致，但 PR AUC 三 seed 均高于 CNN-only。结果以 `docs/phase9_progress_report.md` 为准。不得自动重训、读取 test 或提交/推送。
+- 当前代码已包含完成的阶段八（`d2b17b8`），以 `docs/phase8_progress_report.md` 为权威完成记录；下文阶段七/八未授权的表述为历史阶段边界，不能覆盖后续明确授权。阶段九不因阶段八已有 test 结果而读取或重跑 test。
+
 - 阶段一至阶段四已经完成。
 - 正式基线代码边界是Git标签`v1.0-baseline`；历史标签`phase-4-final-evaluation`指向同一提交。
 - 阶段四官方测试推理已经执行一次，测试结果已经知晓。

@@ -1,15 +1,15 @@
 schema_version: 1
-generated_date: "2026-07-25"
-status: "phase_1_to_7_complete_validation_only"
+generated_date: "2026-11-15"
+status: "phase_1_to_9_complete_phase9_validation_only"
 
 repository:
   name: "cbis-ddsm-mammography-classification"
   remote: "https://github.com/db7-zz/cbis-ddsm-mammography-classification.git"
   workspace: "D:/School Work/codex项目/surf"
   default_branch: "main"
-  current_branch: "phase-7-final"
-  current_branch_remote_exists: true
-  checkout_note: "phase 1-4 are frozen at v1.0-baseline; phase 5 is published; phase 6 is published on phase-6-final; phase 7 is published on phase-7-final"
+  current_branch: "codex/cnn-only-supplement"
+  current_branch_remote_exists: false
+  checkout_note: "Phases 1-4 frozen at v1.0-baseline; phases 5-8 complete; phase9 CNN-only supplement complete locally on codex/cnn-only-supplement, uncommitted and unpushed."
   main_head: "d6530e1f7a53fc131e3a15c6b39f7258599a49de"
   phase4_implementation_commit: "56cdb1814e99523b797b7d7ce17ed5f058f95542"
   tags:
@@ -30,10 +30,11 @@ governance:
   dependency_install_authorized: false
   commit_authorized: true
   push_authorized: true
+  publication_scope: "Only the completed phase9 source/config/test/spec/report/handoff files on codex/cnn-only-supplement; no main merge or local runtime artifacts."
   official_test_reuse_authorized: false
   active_research_plan: "docs/research_plan_v2_post_baseline.md"
-  active_phase_spec: "docs/phase7_efficientnet_v2s_migration_spec.md"
-  phase_spec_status: "phase7_completed_validation_only"
+  active_phase_spec: "docs/phase9_cnn_only_control_spec.md"
+  phase_spec_status: "phase9_complete_validation_only_no_retraining_authorized"
   phase6_commit_authorized: true
   phase6_push_authorized: true
   original_research_plan_role: "historical_reference_only"
@@ -47,8 +48,8 @@ environment:
   cuda: "12.8"
   gpu: "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
   approximate_gpu_memory_gb: 12
-  expected_test_count: 100
-  last_test_result: "100 passed in 10.93s after all phase 7 formal training"
+  expected_test_count: 158
+  last_test_result: "158 passed in 19.40s during phase 9 publication preflight on 2026-11-15"
 
 external_reference:
   original_research_plan: "C:/nonsystem/shoolwork/S3/surf/soph/材料/research-plan.md"
@@ -174,8 +175,64 @@ handoff_publication:
       action: "ask user whether it should be committed"
 
 next_required_user_decision:
-  action: "review phase 7 report and separately approve drafting a phase 8 specification before any phase 8 implementation"
+  action: "Complete the separately authorized 2026-11-15 phase9 publication; additional experiments, official test, dependencies and main merge still require separate authorization."
   implementation_before_decision: false
+
+phase9_progress:
+  approval_date: "2026-11-12"
+  approval_text: "批准，开始执行"
+  implementation_branch: "codex/cnn-only-supplement"
+  implementation_start_commit: "d2b17b8ff184d06b7db6fe27ee9553f17136bde0"
+  spec: "docs/phase9_cnn_only_control_spec.md"
+  report: "docs/phase9_progress_report.md"
+  implementation_started: true
+  formal_training_started: true
+  formal_training_complete: true
+  test_split_loaded: false
+  seeds: [42, 2026, 3407]
+  gate_0: "complete"
+  gate_a: "complete"
+  gate_b: "complete"
+  gate_c: "complete"
+  gate_d: "complete"
+  trainable_parameters: 20178769
+  synthetic_peak_memory_mib: 2035.24
+  implementation_test_result: "158 passed in 38.10s"
+  final_test_result: "158 passed in 28.59s"
+  official_test_inference_passes_added: 0
+  new_training_runs: 3
+  reused_training_runs: 6
+  failed_or_retried_training_runs: 0
+  seed_results:
+    seed42: {completed_epochs: 20, best_epoch: 10, val_roc_auc: 0.708118556701031, val_pr_auc: 0.5810997743817321}
+    seed2026: {completed_epochs: 15, best_epoch: 5, val_roc_auc: 0.7028923253150057, val_pr_auc: 0.5812550524213848}
+    seed3407: {completed_epochs: 21, best_epoch: 11, val_roc_auc: 0.701102520045819, val_pr_auc: 0.5612437640045057}
+  val_roc_auc_mean: 0.7040378006872852
+  val_roc_auc_sample_std: 0.0036455833495057806
+  val_pr_auc_mean: 0.5745328636025409
+  val_pr_auc_sample_std: 0.011508959723288331
+  transformer_minus_cnn_roc_auc_mean: -0.00723081328751433
+  transformer_minus_cnn_roc_auc_positive_seed_count: 2
+  transformer_minus_cnn_pr_auc_positive_seed_count: 3
+  combined_modules_minus_transformer_roc_auc_mean: -0.028362447499045446
+  checkpoint_strict_load_audit: "PASS: six new best/last checkpoints"
+  summary_path: "artifacts/experiments/phase9/comparison/controls_summary.json"
+  reused_artifact_root: "C:/Users/db_7/.codex/worktrees/117d/surf/artifacts/experiments/phase7"
+  dependency_install_authorized: false
+  commit_authorized: true
+  push_authorized: true
+  publication:
+    authorization_date: "2026-11-15"
+    authorization_text: "按照之前的规格把这次更新上传到github"
+    branch: "codex/cnn-only-supplement"
+    status: "authorized_preparing_commit_and_push"
+    source_artifact_manifest_sha256: "211f64eb1b2e1af217575fa72f93feeb5d6fa08713289c8b5ede8fdd47870b74"
+    prepublication_verified_file_count: 52
+    prepublication_hash_mismatches: 0
+    prepublication_test_result: "158 passed in 19.40s"
+    sandbox_temporary_directory_permission_failures: 2
+    runtime_artifacts_uploaded: false
+    main_merge_authorized: false
 
 phase7_progress:
   approval_date: "2026-07-24"

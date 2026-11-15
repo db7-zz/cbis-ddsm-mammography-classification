@@ -1,5 +1,23 @@
 # CBIS-DDSM项目对话迁移交接
 
+## 2026-11-15 阶段九发布授权（优先于下文历史审批边界）
+
+用户明确要求“按照之前的规格把这次更新上传到github”，授权将阶段九已完成的代码、配置、测试、规格、报告与交接记录提交并推送到 `codex/cnn-only-supplement`。本次按明确文件清单暂存，不合并 main，不上传 artifacts、backups、数据、checkpoint、TensorBoard 或无关未跟踪用户目录。没有新的训练、官方 test 或依赖安装授权。
+
+发布前已验证 2026-11-12 的 artifact_manifest.json 中全部 52 个文件哈希一致，清单自身 SHA-256 为 `211f64eb1b2e1af217575fa72f93feeb5d6fa08713289c8b5ede8fdd47870b74`。之后仅更新本次发布授权与交接文档；不重写原始训练产物或原哈希清单。实际发布结果以本分支发布提交和远端核验为准。
+
+## 2026-11-12 当前补实验更新（优先于下文历史状态）
+
+代码已完成阶段八，提交 `d2b17b8ff184d06b7db6fe27ee9553f17136bde0`，详见 `docs/phase8_progress_report.md`。用户于 2026-11-12 明确批准 `docs/phase9_cnn_only_control_spec.md`，现已在 `codex/cnn-only-supplement` 完成 V2S CNN-only 三种子补实验 Gate 0 至 Gate D，完整结果见 `docs/phase9_progress_report.md`；尚未提交或推送。
+
+CNN-only 的 seed 42、2026、3407 validation ROC AUC 分别为 0.7081185567、0.7028923253、0.7011025200，均值/样本标准差为 `0.7040378007 ± 0.0036455833`；PR AUC 为 `0.5745328636 ± 0.0115089597`。复用的 P7-E01、P7-E04 三 seed ROC AUC 均值为 0.6968069874、0.6684445399。Transformer 相对 CNN-only 的 ROC AUC 差值方向为正、正、负，没有跨 seed 一致收益；其 PR AUC 三 seed 均更高，不能概括成所有指标无效。CNN-only 未做官方 test，阶段七/八历史冻结模型角色不改写。
+
+三次新训练均正常早停，无失败重跑；六个新 checkpoint 严格加载通过；最终完整回归 `158 passed in 28.59s`。新产物为 `artifacts/experiments/phase9/`，汇总为 `comparison/controls_summary.json`，运行源码哈希与训练时一致。补实验已完成，不自动重新运行已存在的实验入口（会拒绝覆盖）。
+
+批准允许连续完成 seed 42、2026、3407 的 train/validation 训练，复用已核验的 P7-E01/P7-E04 三种子结果并汇总。不得读取官方 test、安装依赖、补 B0、commit 或 push。原始阶段七产物只读引用 `C:/Users/db_7/.codex/worktrees/117d/surf/artifacts/experiments/phase7/`；新产物写入 `artifacts/experiments/phase9/`，禁止覆盖已有运行目录。
+
+本工作区未跟踪的 presentations、publication_figures、reports、w1、w2、w3 均不属于补实验修改范围。接手回归在补齐两个锁定的 seed 42 validation 预测后为 139 passed；未读取 test。下文为历史交接记录，保留追溯。
+
 生成日期：2026-07-25
 用途：供全新Codex对话在不依赖旧聊天记录的情况下接手项目
 状态：阶段一至阶段四冻结为v1.0-baseline；阶段五至阶段七Gate均已完成；阶段七发布在`phase-7-final`

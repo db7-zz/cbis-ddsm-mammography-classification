@@ -1,0 +1,72 @@
+early_stopping:
+  min_delta: 0.001
+  mode: max
+  monitor: val_roc_auc
+  patience: 10
+experiment:
+  id: P9-E01_V2S_CNN_only_seed2026
+  stage: 9
+  variant: v2s_cnn_only
+  purpose: CNN-only control under the frozen phase 7 protocol
+logging:
+  save_validation_predictions: true
+  tensorboard: true
+loss:
+  name: BCEWithLogitsLoss
+  pos_weight: 1.84
+model:
+  input_size: 384
+  backbone: efficientnet_v2_s
+  pretrained: true
+  freeze_backbone: false
+  pooling: global_average
+  output_logits: 1
+optimizer:
+  learning_rate: 0.0001
+  name: AdamW
+  weight_decay: 0.0001
+preprocessing:
+  breast_margin_fraction: 0.02
+  dicom_apply_modality_lut: true
+  dicom_apply_voi_lut: true
+  image_size: 384
+  imagenet_mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  imagenet_std:
+  - 0.229
+  - 0.224
+  - 0.225
+  lower_percentile: 0.5
+  max_foreground_fraction: 0.95
+  min_breast_height_fraction: 0.25
+  min_breast_width_fraction: 0.25
+  min_foreground_fraction: 0.15
+  spatial_mode: breast_crop_letterbox
+  train_affine_probability: 0.0
+  train_contrast_probability: 0.0
+  train_gamma_probability: 0.0
+  train_horizontal_flip_probability: 0.0
+  train_rotation_degrees: 0.0
+  upper_percentile: 99.5
+scheduler:
+  factor: 0.5
+  min_learning_rate: 1.0e-06
+  mode: max
+  monitor: val_roc_auc
+  name: ReduceLROnPlateau
+  patience: 3
+training:
+  batch_size: 8
+  deterministic: true
+  gradient_accumulation_steps: 2
+  gradient_clip_norm: 1.0
+  max_epochs: 50
+  mixed_precision: true
+  num_workers: 4
+  output_dir: artifacts/experiments/phase9/P9-E01_V2S_CNN_only_seed2026
+  persistent_workers: true
+  pin_memory: true
+  prefetch_factor: 2
+  seed: 2026

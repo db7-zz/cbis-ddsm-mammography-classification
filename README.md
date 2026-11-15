@@ -1,5 +1,14 @@
 # CBIS-DDSM calcification baseline reproduction
 
+Completed (2026-11-12): the approved [V2S CNN-only supplement](docs/phase9_cnn_only_control_spec.md)
+ran seeds 42/2026/3407 under the frozen phase 7 train/validation protocol.
+Validation ROC AUC is **0.70404 ± 0.00365**; PR AUC is **0.57453 ± 0.01151** (sample SD).
+Transformer ROC AUC gains were inconsistent across seeds, while its PR AUC was higher in all three.
+See the [completed report](docs/phase9_progress_report.md). Phase 8 is complete;
+this supplement does not access official test data or add test inference passes.
+Entry points: `scripts/audit_phase9_cnn_only.py`, `scripts/run_phase9_experiment.py`
+and `scripts/summarize_phase9_controls.py`. Existing P7-E01/P7-E04 results are reused.
+
 This repository is a clean-room reproduction of the approved calcification-only,
 whole-mammogram CBIS-DDSM binary classification baseline. Phase 1 contains the
 patient-safe data pipeline. Phase 2 adds the structurally verified
