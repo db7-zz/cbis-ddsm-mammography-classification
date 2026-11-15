@@ -8,6 +8,8 @@ See the [completed report](docs/phase9_progress_report.md). Phase 8 is complete;
 this supplement does not access official test data or add test inference passes.
 Entry points: `scripts/audit_phase9_cnn_only.py`, `scripts/run_phase9_experiment.py`
 and `scripts/summarize_phase9_controls.py`. Existing P7-E01/P7-E04 results are reused.
+Published on [codex/cnn-only-supplement](https://github.com/db7-zz/cbis-ddsm-mammography-classification/tree/codex/cnn-only-supplement)
+on 2026-11-15; implementation commit `de8a378`. Runtime datasets and checkpoints remain local.
 
 This repository is a clean-room reproduction of the approved calcification-only,
 whole-mammogram CBIS-DDSM binary classification baseline. Phase 1 contains the

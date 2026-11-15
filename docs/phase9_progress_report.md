@@ -3,6 +3,8 @@
 日期：2026-11-12
 状态：Gate 0、A、B、C、D 全部完成；仅使用 train/validation。2026-11-12 训练完成时未提交或推送；用户于 2026-11-15 单独授权发布，见第 11 节。
 
+发布状态：阶段九实现提交 `de8a378faed92ce174ddc006016d32ffa1b6755d` 已于 2026-11-15 推送到 `origin/codex/cnn-only-supplement`，远端核验通过。
+
 ## 1. 结论与指标边界
 
 按照预先冻结的主要指标 validation ROC AUC，CNN-only 三种子均值为 **0.7040378007 ± 0.0036455833**，高于 V2S + Transformer 的 0.6968069874 ± 0.0252671825。Transformer 相对 CNN-only 的同种子 ROC AUC 差值为 +0.0098081329、+0.0007875143、−0.0322880871，均值 −0.0072308133，因此未观察到跨种子一致的 ROC AUC 收益。
@@ -144,3 +146,5 @@ artifacts/experiments/phase9/comparison/validation_auc_comparison.png
 2026-11-15 发布前完整回归为 `158 passed in 19.40s`，`git diff --check` 通过。此前两次沙箱运行被临时目录写权限限制阻止，未更改代码或测试绕过；随后使用新临时目录和获准的执行权限完成复核。Git 网络命令仅对本次连接临时禁用失效的本地代理，没有修改全局代理配置。
 
 本次没有重新训练或运行官方 test，也没有安装依赖、合并 main、删除分支或处理用户文件。第 2 节和第 10 节中的未授权/未提交表述记录的是 2026-11-12 的实验完成状态。
+
+实现提交：[de8a378faed92ce174ddc006016d32ffa1b6755d](https://github.com/db7-zz/cbis-ddsm-mammography-classification/commit/de8a378faed92ce174ddc006016d32ffa1b6755d)。17 个文件已成功推送，GitHub 分支提交与本地实现提交一致；后续发布交接提交仅更新文档。工作区剩余未跟踪内容均为原有无关用户目录，未暂存。

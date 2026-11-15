@@ -8,8 +8,8 @@ repository:
   workspace: "D:/School Work/codex项目/surf"
   default_branch: "main"
   current_branch: "codex/cnn-only-supplement"
-  current_branch_remote_exists: false
-  checkout_note: "Phases 1-4 frozen at v1.0-baseline; phases 5-8 complete; phase9 CNN-only supplement complete locally on codex/cnn-only-supplement, uncommitted and unpushed."
+  current_branch_remote_exists: true
+  checkout_note: "Phases 1-4 frozen at v1.0-baseline; phases 5-8 complete; phase9 implementation de8a378 is published on codex/cnn-only-supplement; subsequent documentation records the verified publication."
   main_head: "d6530e1f7a53fc131e3a15c6b39f7258599a49de"
   phase4_implementation_commit: "56cdb1814e99523b797b7d7ce17ed5f058f95542"
   tags:
@@ -175,7 +175,7 @@ handoff_publication:
       action: "ask user whether it should be committed"
 
 next_required_user_decision:
-  action: "Complete the separately authorized 2026-11-15 phase9 publication; additional experiments, official test, dependencies and main merge still require separate authorization."
+  action: "Phase9 publication is complete; additional changes, experiments, official test, dependencies and main merge require separate authorization."
   implementation_before_decision: false
 
 phase9_progress:
@@ -225,7 +225,11 @@ phase9_progress:
     authorization_date: "2026-11-15"
     authorization_text: "按照之前的规格把这次更新上传到github"
     branch: "codex/cnn-only-supplement"
-    status: "authorized_preparing_commit_and_push"
+    status: "implementation_published_remote_verified"
+    implementation_commit: "de8a378faed92ce174ddc006016d32ffa1b6755d"
+    publication_date: "2026-11-15"
+    remote: "origin"
+    remote_verified: true
     source_artifact_manifest_sha256: "211f64eb1b2e1af217575fa72f93feeb5d6fa08713289c8b5ede8fdd47870b74"
     prepublication_verified_file_count: 52
     prepublication_hash_mismatches: 0

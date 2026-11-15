@@ -155,3 +155,5 @@ docs/phase9_progress_report.md
 Transformer 相对 CNN-only 的同 seed ROC AUC 差值为 +0.0098081329、+0.0007875143、−0.0322880871，未显示跨种子一致 ROC AUC 收益；PR AUC 三个差值均为正，均值 +0.0153730588，必须同时报告。BiFPN/CBAM 组合相对 Transformer 的 ROC AUC 均值差为 −0.0283624475，方向同样不一致。
 
 九次新/旧运行均已独立复算指标；六个新 checkpoint 严格加载通过；最终完整回归 `158 passed in 28.59s`。全部新运行 `test_split_loaded=false`，未新增官方 test 推理、未安装依赖、未提交或推送。完整结果与限制见 `docs/phase9_progress_report.md`。
+
+2026-11-15 发布完成记录：用户另行授权后，阶段九实现提交 `de8a378faed92ce174ddc006016d32ffa1b6755d` 已推送到 `origin/codex/cnn-only-supplement` 并核验远端一致；发布前完整回归 `158 passed in 19.40s`。本段之前的“未提交或推送”描述为 2026-11-12 的实验完成快照。本次只发布代码、配置、测试和文档，不上传训练产物或数据。

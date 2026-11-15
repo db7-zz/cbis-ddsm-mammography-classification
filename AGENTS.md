@@ -9,6 +9,7 @@
 ## 当前阶段边界
 
 - 用户已于 2026-11-15 明确要求“按照之前的规格把这次更新上传到github”，单独授权提交并推送阶段九已完成成果到规格指定的 `codex/cnn-only-supplement` 分支。授权仅覆盖阶段九代码、配置、测试、规格、报告及交接记录；不包含 main 合并、官方 test、重训、依赖安装或上传本地数据/checkpoint/无关用户文件。
+- 阶段九实现提交 `de8a378faed92ce174ddc006016d32ffa1b6755d` 已推送到 `origin/codex/cnn-only-supplement` 并完成远端核验；发布前回归 `158 passed in 19.40s`。后续文档提交仅记录本次发布，历史“未授权 commit/push”的条款不覆盖这次明确授权，也不授权额外新改动。
 - 用户已于 2026-11-15 明确要求“按照之前的规格把这次更新上传到github”，单独授权提交并推送阶段九已完成成果到规格指定的 `codex/cnn-only-supplement` 分支。授权仅覆盖阶段九代码、配置、测试、规格、报告及交接记录；不包含 main 合并、官方 test、重训、依赖安装或上传本地数据/checkpoint/无关用户文件。
 - 2026-11-12 当前补实验以 `docs/phase9_cnn_only_control_spec.md` 为准，用户已明确批准实施并连续完成 V2S CNN-only 的 seed 42、2026、3407 三次 train/validation 训练及已有 P7-E01/P7-E04 对照汇总；不包含官方 test、依赖安装、B0 CNN-only、commit 或 push。
 - 阶段九 Gate 0 至 Gate D 已于 2026-11-12 全部完成。CNN-only validation ROC AUC 为 `0.7040378007 ± 0.0036455833`，PR AUC 为 `0.5745328636 ± 0.0115089597`；Transformer 的 ROC AUC 增益跨 seed 不一致，但 PR AUC 三 seed 均高于 CNN-only。结果以 `docs/phase9_progress_report.md` 为准。不得自动重训、读取 test 或提交/推送。

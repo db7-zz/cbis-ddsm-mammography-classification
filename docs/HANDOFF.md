@@ -6,6 +6,8 @@
 
 发布前已验证 2026-11-12 的 artifact_manifest.json 中全部 52 个文件哈希一致，清单自身 SHA-256 为 `211f64eb1b2e1af217575fa72f93feeb5d6fa08713289c8b5ede8fdd47870b74`。之后仅更新本次发布授权与交接文档；不重写原始训练产物或原哈希清单。实际发布结果以本分支发布提交和远端核验为准。
 
+阶段九实现提交 `de8a378faed92ce174ddc006016d32ffa1b6755d` 已于 2026-11-15 推送到 `origin/codex/cnn-only-supplement`；本地与 GitHub 分支提交已核对一致。发布前完整回归为 `158 passed in 19.40s`。本交接更新随后的文档提交只记录已核验的发布事实，不改训练代码和指标。分支入口：[阶段九补实验](https://github.com/db7-zz/cbis-ddsm-mammography-classification/tree/codex/cnn-only-supplement)。下文“尚未提交或推送”均指 2026-11-12 的历史状态。
+
 ## 2026-11-12 当前补实验更新（优先于下文历史状态）
 
 代码已完成阶段八，提交 `d2b17b8ff184d06b7db6fe27ee9553f17136bde0`，详见 `docs/phase8_progress_report.md`。用户于 2026-11-12 明确批准 `docs/phase9_cnn_only_control_spec.md`，现已在 `codex/cnn-only-supplement` 完成 V2S CNN-only 三种子补实验 Gate 0 至 Gate D，完整结果见 `docs/phase9_progress_report.md`；尚未提交或推送。
